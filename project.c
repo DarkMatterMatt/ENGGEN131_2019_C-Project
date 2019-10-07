@@ -216,7 +216,14 @@ int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
 	switch (move) {
 		// up
 		case 'w': {
-			if (warehouse[workerY - 1][workerX] == SPACE) {
+			if (warehouse[workerY - 1][workerX] == BOX) {
+				if (warehouse[workerY - 2][workerX] == SPACE) {
+					warehouse[workerY - 2][workerX] = BOX;
+					warehouse[workerY - 1][workerX] = WORKER;
+					warehouse[workerY][workerX] = SPACE;
+				}
+			}
+			else if (warehouse[workerY - 1][workerX] == SPACE) {
 				warehouse[workerY - 1][workerX] = WORKER;
 				warehouse[workerY][workerX] = SPACE;
 			}
@@ -224,7 +231,14 @@ int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
 		}
 		// left
 		case 'a': {
-			if (warehouse[workerY][workerX - 1] == SPACE) {
+			if (warehouse[workerY][workerX - 1] == BOX) {
+				if (warehouse[workerY][workerX - 2] == SPACE) {
+					warehouse[workerY][workerX - 2] = BOX;
+					warehouse[workerY][workerX - 1] = WORKER;
+					warehouse[workerY][workerX] = SPACE;
+				}
+			}
+			else if (warehouse[workerY][workerX - 1] == SPACE) {
 				warehouse[workerY][workerX - 1] = WORKER;
 				warehouse[workerY][workerX] = SPACE;
 			}
@@ -232,7 +246,14 @@ int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
 		}
 		// down
 		case 's': {
-			if (warehouse[workerY + 1][workerX] == SPACE) {
+			if (warehouse[workerY + 1][workerX] == BOX) {
+				if (warehouse[workerY + 2][workerX] == SPACE) {
+					warehouse[workerY + 2][workerX] = BOX;
+					warehouse[workerY + 1][workerX] = WORKER;
+					warehouse[workerY][workerX] = SPACE;
+				}
+			}
+			else if (warehouse[workerY + 1][workerX] == SPACE) {
 				warehouse[workerY + 1][workerX] = WORKER;
 				warehouse[workerY][workerX] = SPACE;
 			}
@@ -240,7 +261,14 @@ int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
 		}
 		// right
 		case 'd': {
-			if (warehouse[workerY][workerX + 1] == SPACE) {
+			if (warehouse[workerY][workerX + 1] == BOX) {
+				if (warehouse[workerY][workerX + 2] == SPACE) {
+					warehouse[workerY][workerX + 2] = BOX;
+					warehouse[workerY][workerX + 1] = WORKER;
+					warehouse[workerY][workerX] = SPACE;
+				}
+			}
+			else if (warehouse[workerY][workerX + 1] == SPACE) {
 				warehouse[workerY][workerX + 1] = WORKER;
 				warehouse[workerY][workerX] = SPACE;
 			}
