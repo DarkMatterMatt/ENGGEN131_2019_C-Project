@@ -57,9 +57,13 @@ void MyTestFunction(int task) {
 			int values1[MAX_ARRAY_SIZE] = {3, 7, 5, 6, 3, 4, 8, 4, 5, 8, 12, 11};
 			int values2[MAX_ARRAY_SIZE] = {6, 17, 6, 6, 6, 6, 12, 12, 17, 10000};
 			int values3[MAX_ARRAY_SIZE] = {5, 4, 3, 2, 1};
-			printf("   Winning bid = %d (should be 6)\n", WinningBid(values1, 12));
-			printf("   Winning bid = %d (should be 10000)\n", WinningBid(values2, 10));
-			printf("   Winning bid = %d (should be 1)\n", WinningBid(values3, 5));
+			int values4[MAX_ARRAY_SIZE] = {1};
+			int values5[MAX_ARRAY_SIZE] = {5, 5};
+			printf("   WinningBid({3, 7, 5, 6, 3, 4, 8, 4, 5, 8, 12, 11}) = %d (should be 6)\n", WinningBid(values1, 12));
+			printf("   WinningBid({6, 17, 6, 6, 6, 6, 12, 12, 17, 10000}) = %d (should be 10000)\n", WinningBid(values2, 10));
+			printf("   WinningBid({5, 4, 3, 2, 1}) = %d (should be 1)\n", WinningBid(values3, 5));
+			printf("   WinningBid({1}) = %d (should be 1)\n", WinningBid(values4, 1));
+			printf("   WinningBid({5, 5}) = %d (should be -1)\n", WinningBid(values5, 2));
 			break;
 		}
 
@@ -71,12 +75,21 @@ void MyTestFunction(int task) {
 			char box1[MAX_ARRAY_SIZE] = {0};
 			char box2[MAX_ARRAY_SIZE] = {0};
 			char box3[MAX_ARRAY_SIZE] = {0};
+			char box4[MAX_ARRAY_SIZE] = {0};
+			char box5[MAX_ARRAY_SIZE] = {0};
+			char box6[MAX_ARRAY_SIZE] = {0};
 			BoxDesign(box1, 12, 5);
 			BoxDesign(box2, 15, 15);
 			BoxDesign(box3, 4, 4);
+			BoxDesign(box4, 2, 2);
+			BoxDesign(box5, 5, 2);
+			BoxDesign(box6, 2, 5);
 			printf("Box 1 = \n%s\n", box1);
 			printf("Box 2 = \n%s\n", box2);
 			printf("Box 3 = \n%s\n", box3);
+			printf("Box 4 = \n%s\n", box4);
+			printf("Box 5 = \n%s\n", box5);
+			printf("Box 6 = \n%s\n", box6);
 			printf("Checking string lengths = %d %d %d\n", strlen(box1), strlen(box2), strlen(box3));
 			break;
 		}
@@ -111,9 +124,48 @@ void MyTestFunction(int task) {
 				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 				{0, 0, 0, 0, 0, 0, 0, 0, 0, 2}
 			};
+			int warehouse3[WAREHOUSE_SIZE][WAREHOUSE_SIZE] = {
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 1, 2, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+			};
+			int warehouse4[WAREHOUSE_SIZE][WAREHOUSE_SIZE] = {
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 2, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+			};
+			int warehouse5[WAREHOUSE_SIZE][WAREHOUSE_SIZE] = {
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 1, 0, 0, 2, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+			};
 
 			WorkerRoute(warehouse1);
 			WorkerRoute(warehouse2);
+			WorkerRoute(warehouse3);
+			WorkerRoute(warehouse4);
+			WorkerRoute(warehouse5);
 
 			printf("Worker route 1: \n");
 			for (i = 0; i < WAREHOUSE_SIZE; i++) {
@@ -122,10 +174,35 @@ void MyTestFunction(int task) {
 				}
 				printf("\n");
 			}
+
 			printf("\nWorker route 2: \n");
 			for (i = 0; i < WAREHOUSE_SIZE; i++) {
 				for (j = 0; j < WAREHOUSE_SIZE; j++) {
 					printf("%d", warehouse2[i][j]);
+				}
+				printf("\n");
+			}
+
+			printf("Worker route 3: \n");
+			for (i = 0; i < WAREHOUSE_SIZE; i++) {
+				for (j = 0; j < WAREHOUSE_SIZE; j++) {
+					printf("%d", warehouse3[i][j]);
+				}
+				printf("\n");
+			}
+			
+			printf("Worker route 4: \n");
+			for (i = 0; i < WAREHOUSE_SIZE; i++) {
+				for (j = 0; j < WAREHOUSE_SIZE; j++) {
+					printf("%d", warehouse4[i][j]);
+				}
+				printf("\n");
+			}
+			
+			printf("Worker route 5: \n");
+			for (i = 0; i < WAREHOUSE_SIZE; i++) {
+				for (j = 0; j < WAREHOUSE_SIZE; j++) {
+					printf("%d", warehouse5[i][j]);
 				}
 				printf("\n");
 			}

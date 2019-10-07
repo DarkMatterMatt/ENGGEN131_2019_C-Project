@@ -5,6 +5,8 @@
 
 #include <stdlib.h>
 #include "project.h"
+#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
+#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
 
 int IsPrime(int num) {
     for (int i = 2; i * i <= num; i++) {
@@ -13,6 +15,12 @@ int IsPrime(int num) {
         }
     }
     return 1;
+}
+
+int compareInts(const void *aPointer, const void *bPointer) {
+    int a = *((int*) aPointer);
+    int b = *((int*) bPointer);
+    return (a > b) - (a < b);
 }
 
 /*
@@ -76,10 +84,36 @@ Your comment should go here � it should describe the purpose of the function a
 brief summary of the algorithm you have used to solve the task (this comment must
 be written in your own words
 */
-int WinningBid(int *values, int length) {
-	values[0] = length;
-	return values[0] - length - 9999;
 
+int WinningBid(int *values, int length) {
+	// if their is only one bid then it wins by default
+	if (length == 1) {
+		return values[0];
+	}
+
+	// sort bids ascending
+	qsort(values, length, sizeof(int), compareInts);
+
+	// check if lowest bid is unique
+	if (values[0] != values[1]) {
+		return values[0];
+	}
+
+	// check if any bids in the middle are unique
+	for (int i = 1; i < length - 1; i++) {
+		// unique if different from elements before and after
+		if (values[i - 1] != values [i] && values[i] != values [i + 1]) {
+			return values[i];
+		}
+	}
+
+	// check if highest bid is unique
+	if (values[length - 2] != values[length - 1]) {
+		return values[length - 1];
+	}
+
+	// no unique bids
+	return -1;
 }
 
 /*
@@ -88,13 +122,38 @@ brief summary of the algorithm you have used to solve the task (this comment mus
 be written in your own words
 */
 void BoxDesign(char *design, int width, int height) {
-	width = height;
-	design[0] = '-';
-	design[1] = '9';
-	design[2] = '9';
-	design[3] = '9';
-	design[4] = '9';
-	design[5] = '\0';
+	// find positions for center marks
+	int centerX1 = width / 2;
+	int centerX2 = centerX1 - 1 + width % 2; // add another X if even width
+	int centerY1 = height / 2;
+	int centerY2 = centerY1 - 1 + height % 2; // add another X if even height
+
+	// don't add center marks if there is no room for them
+	if (width < 3 || height < 3) {
+		centerX1 = centerX2 = centerY1 = centerY2 = -1;
+	}
+
+	int i = 0; // current position in string
+
+	// loop through each row down the page
+	for (int y = 0; y < height; y++) {
+		for (int x = 0; x < width; x++) {
+			// add box borders
+			if (0 == x || x == width - 1 || 0 == y || y == height - 1) {
+				design[i++] = '*';
+			}
+			// add center marks
+			else if ((centerX1 == x || x == centerX2) && (centerY1 == y || y == centerY2)) {
+				design[i++] = 'X';
+			}
+			// space in the center of the box
+			else {
+				design[i++] = ' ';
+			}
+		}
+		// add a newline at the end of each row
+		design[i++] = '\n';
+	}
 }
 
 /*
@@ -102,8 +161,38 @@ Your comment should go here � it should describe the purpose of the function a
 brief summary of the algorithm you have used to solve the task (this comment must
 be written in your own words
 */
-void WorkerRoute(int warehouse[10][10]) {
-	warehouse[0][0] = -9999;
+void WorkerRoute(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE]) {
+	// find location of worker and box
+	int workerX, workerY, boxX, boxY;
+	for (int y = 0; y < WAREHOUSE_SIZE; y++) {
+		for (int x = 0; x < WAREHOUSE_SIZE; x++) {
+			// check if it is the worker
+			if (warehouse[y][x] == 1) {
+				workerX = x;
+				workerY = y;
+			}
+			// check if it is the box
+			else if (warehouse[y][x] == 2) {
+				boxX = x;
+				boxY = y;
+			}
+		}
+	}
+
+	// draw path horizontally
+	for (int x = MIN(workerX, boxX) + 1; x < MAX(workerX, boxX); x++) {
+		warehouse[workerY][x] = 3;
+	}
+
+	// draw path vertically
+	for (int y = MIN(workerY, boxY) + 1; y < MAX(workerY, boxY); y++) {
+		warehouse[y][boxX] = 3;
+	}
+
+	// add in the intersection/corner (if the worker and box aren't there)
+	if (warehouse[workerY][boxX] == 0) {
+		warehouse[workerY][boxX] = 3;
+	}
 }
 
 /*
