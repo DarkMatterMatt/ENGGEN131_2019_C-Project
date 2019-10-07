@@ -55,12 +55,20 @@ brief summary of the algorithm you have used to solve the task (this comment mus
 be written in your own words
 */
 void Advertise(char *words) {
-	words[0] = '-';
-	words[1] = '9';
-	words[2] = '9';
-	words[3] = '9';
-	words[4] = '9';
-	words[5] = '\0';
+	// strings are null-terminated, find length of string
+	int length = -1;
+	while (words[++length]);
+
+	// store first character
+	char firstChar = words[0];
+
+	// rotate characters
+	for (int i = 1; i < length; i++) {
+		words[i - 1] = words[i];
+	}
+
+	// append first character to the end
+	words[length - 1] = firstChar;
 }
 
 /*

@@ -13,9 +13,11 @@ void MyTestFunction(int task) {
 		case 1: {
 			printf("\nTESTING TASK ONE:\n");
 			printf("=================\n");
-			printf("   Time worked = %d (should be 60)\n", TimeWorked(1, 0, 2, 0));
-			printf("   Time worked = %d (should be 779)\n", TimeWorked(55, 11, 42, 12));
-			printf("   Time worked = %d (should be 0)\n", TimeWorked(33, 33, 33, 33));
+			printf("   TimeWorked(2, 0, 1, 0) = %d (should be 60)\n", TimeWorked(2, 0, 1, 0));
+			printf("   TimeWorked(1, 0, 2, 0) = %d (should be 60)\n", TimeWorked(1, 0, 2, 0));
+			printf("   TimeWorked(55, 11, 42, 12) = %d (should be 779)\n", TimeWorked(55, 11, 42, 12));
+			printf("   TimeWorked(42, 12, 55, 11) = %d (should be 779)\n", TimeWorked(42, 12, 55, 11));
+			printf("   TimeWorked(33, 33, 33, 33) = %d (should be 0)\n", TimeWorked(33, 33, 33, 33));
 			break;
 		}
 
@@ -24,9 +26,9 @@ void MyTestFunction(int task) {
 		case 2: {
 			printf("\nTESTING TASK TWO:\n");
 			printf("=================\n");
-			printf("   Address = %d (should be 997)\n", WarehouseAddress(1000));
-			printf("   Address = %d (should be 47)\n", WarehouseAddress(50));
-			printf("   Address = %d (should be 104383)\n", WarehouseAddress(104393));
+			printf("   WarehouseAddress(1000) = %d (should be 997)\n", WarehouseAddress(1000));
+			printf("   WarehouseAddress(50) = %d (should be 47)\n", WarehouseAddress(50));
+			printf("   WarehouseAddress(104393) = %d (should be 104383)\n", WarehouseAddress(104393));
 			break;
 		}
 
@@ -41,9 +43,9 @@ void MyTestFunction(int task) {
 			Advertise(message1);
 			Advertise(message2);
 			Advertise(message3);
-			printf("   Advertise = \"%s\" (should be: \"iscount today only!D\")\n", message1);
-			printf("   Advertise = \"%s\" (should be: \"urry, hurry, hurry...H\")\n", message2);
-			printf("   Advertise = \"%s\" (should be: \"ood luck!G\")\n", message3);
+			printf("   Advertise(Discount today only!) = \"%s\" (should be: \"iscount today only!D\")\n", message1);
+			printf("   Advertise(Hurry, hurry, hurry...) = \"%s\" (should be: \"urry, hurry, hurry...H\")\n", message2);
+			printf("   Advertise(Good luck!) = \"%s\" (should be: \"ood luck!G\")\n", message3);
 			break;
 		}
 
