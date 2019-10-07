@@ -278,4 +278,3 @@ int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
 
 	return 0;
 }
-
