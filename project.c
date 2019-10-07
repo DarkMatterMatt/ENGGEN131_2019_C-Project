@@ -201,6 +201,19 @@ brief summary of the algorithm you have used to solve the task (this comment mus
 be written in your own words
 */
 int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
+	static int targetsCovered, totalTargets;
+	if (!totalTargets) {
+		// count total number of targets
+		for (int y = 0; y < WAREHOUSE_SIZE; y++) {
+			for (int x = 0; x < WAREHOUSE_SIZE; x++) {
+				// check if it is a target
+				if (warehouse[y][x] == TARGET || warehouse[y][x] == WORKER_ON_TARGET || warehouse[y][x] == BOX_ON_TARGET) {
+					totalTargets++;
+				}
+			}
+		}
+	}
+
 	// find location of worker
 	int workerX, workerY;
 	for (int y = 0; y < WAREHOUSE_SIZE; y++) {
