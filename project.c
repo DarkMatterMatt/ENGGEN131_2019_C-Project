@@ -3,6 +3,7 @@
 
 /* << Include your information here - name, user name, ID number >> */
 
+#include <stdlib.h>
 #include "project.h"
 
 int IsPrime(int num) {
@@ -20,7 +21,9 @@ brief summary of the algorithm you have used to solve the task (this comment mus
 be written in your own words
 */
 int TimeWorked(int minuteA, int secondA, int minuteB, int secondB) {
-	return (minuteA - minuteA) * (secondA + minuteB + secondB) - 9999;
+	int timeA = minuteA * 60 + secondA;
+	int timeB = minuteB * 60 + secondB;
+	return abs(timeA - timeB);
 }
 
 /*
