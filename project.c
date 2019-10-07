@@ -200,9 +200,54 @@ Your comment should go here � it should describe the purpose of the function a
 brief summary of the algorithm you have used to solve the task (this comment must
 be written in your own words
 */
-int MakeMove(int warehouse[10][10], char move) {
-	move = '0';
-	warehouse[0][0] = warehouse[0][0];
+int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
+	// find location of worker
+	int workerX, workerY;
+	for (int y = 0; y < WAREHOUSE_SIZE; y++) {
+		for (int x = 0; x < WAREHOUSE_SIZE; x++) {
+			// check if it is the worker
+			if (warehouse[y][x] == WORKER) {
+				workerX = x;
+				workerY = y;
+			}
+		}
+	}
+
+	switch (move) {
+		// up
+		case 'w': {
+			if (warehouse[workerY - 1][workerX] == SPACE) {
+				warehouse[workerY - 1][workerX] = WORKER;
+				warehouse[workerY][workerX] = SPACE;
+			}
+			break;
+		}
+		// left
+		case 'a': {
+			if (warehouse[workerY][workerX - 1] == SPACE) {
+				warehouse[workerY][workerX - 1] = WORKER;
+				warehouse[workerY][workerX] = SPACE;
+			}
+			break;
+		}
+		// down
+		case 's': {
+			if (warehouse[workerY + 1][workerX] == SPACE) {
+				warehouse[workerY + 1][workerX] = WORKER;
+				warehouse[workerY][workerX] = SPACE;
+			}
+			break;
+		}
+		// right
+		case 'd': {
+			if (warehouse[workerY][workerX + 1] == SPACE) {
+				warehouse[workerY][workerX + 1] = WORKER;
+				warehouse[workerY][workerX] = SPACE;
+			}
+			break;
+		}
+	}
+
 	return 0;
 }
 
