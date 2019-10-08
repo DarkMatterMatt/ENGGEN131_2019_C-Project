@@ -135,32 +135,36 @@ int SwapTiles(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], Point p1, Point p2)
 
 	if (DEBUG) printf("Swapping (%c, %c)\n", GetTileChar(p1Value), GetTileChar(p2Value));
 
-    // remove the 'on target' modifier from the source values
-    if (p1Value == TARGET)           p1Value = SPACE;
-    if (p2Value == TARGET)           p2Value = SPACE;
-    if (p1Value == BOX_ON_TARGET)    p1Value = BOX;
-    if (p2Value == BOX_ON_TARGET)    p2Value = BOX;
-    if (p1Value == WORKER_ON_TARGET) p1Value = WORKER;
-    if (p2Value == WORKER_ON_TARGET) p2Value = WORKER;
+	// swap
+	int p1NewValue = p2Value;
+	int p2NewValue = p1Value;
 
-	// the original p2 tile was a target (or a box/worker on top of a target)
-    if (TileIsTarget(warehouse[p2.y][p2.x])) {
+    // remove the 'on target' modifier from the source values
+    if (p1NewValue == TARGET)           p1NewValue = SPACE;
+    if (p2NewValue == TARGET)           p2NewValue = SPACE;
+    if (p1NewValue == BOX_ON_TARGET)    p1NewValue = BOX;
+    if (p2NewValue == BOX_ON_TARGET)    p2NewValue = BOX;
+    if (p1NewValue == WORKER_ON_TARGET) p1NewValue = WORKER;
+    if (p2NewValue == WORKER_ON_TARGET) p2NewValue = WORKER;
+
+	// if the original p1 tile was a target (or a box/worker on top of a target)
+    if (TileIsTarget(p1Value)) {
     	// add the 'on target' modifier to the destination values
-        if (p1Value == SPACE)  p1Value = TARGET;
-        if (p1Value == BOX)    p1Value = BOX_ON_TARGET;
-        if (p1Value == WORKER) p1Value = WORKER_ON_TARGET;
+        if (p1NewValue == SPACE)  p1NewValue = TARGET;
+        if (p1NewValue == BOX)    p1NewValue = BOX_ON_TARGET;
+        if (p1NewValue == WORKER) p1NewValue = WORKER_ON_TARGET;
     }
-	// the original p1 tile was a target (or a box/worker on top of a target)
-    if (TileIsTarget(warehouse[p1.y][p1.x])) {
+	// if the original p2 tile was a target (or a box/worker on top of a target)
+    if (TileIsTarget(p2Value)) {
     	// add the 'on target' modifier to the destination values
-        if (p2Value == SPACE)  p2Value = TARGET;
-        if (p2Value == BOX)    p2Value = BOX_ON_TARGET;
-        if (p2Value == WORKER) p2Value = WORKER_ON_TARGET;
+        if (p2NewValue == SPACE)  p2NewValue = TARGET;
+        if (p2NewValue == BOX)    p2NewValue = BOX_ON_TARGET;
+        if (p2NewValue == WORKER) p2NewValue = WORKER_ON_TARGET;
     }
 
     // assign values to the warehouse
-    warehouse[p1.y][p1.x] = p2Value;
-    warehouse[p2.y][p2.x] = p1Value;
+    warehouse[p1.y][p1.x] = p1NewValue;
+    warehouse[p2.y][p2.x] = p2NewValue;
 
 	return 0;
 }
