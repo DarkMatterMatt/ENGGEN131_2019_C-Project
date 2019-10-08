@@ -47,7 +47,7 @@ Point findInWarehouse(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile) {
 	}
 }
 
-int countInWarehouse3(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1, int tile2, int tile3) {
+int CountInWarehouse3(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1, int tile2, int tile3) {
 	int count = 0;
 	for (int y = 0; y < WAREHOUSE_SIZE; y++) {
 		for (int x = 0; x < WAREHOUSE_SIZE; x++) {
@@ -58,11 +58,11 @@ int countInWarehouse3(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1, 
 	}
 	return count;
 }
-int countInWarehouse2(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1, int tile2) {
-	return countInWarehouse3(warehouse, tile1, tile2, -1);
+int CountInWarehouse2(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1, int tile2) {
+	return CountInWarehouse3(warehouse, tile1, tile2, -1);
 }
-int countInWarehouse(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile) {
-	return countInWarehouse3(warehouse, tile, -1, -1);
+int CountInWarehouse(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile) {
+	return CountInWarehouse3(warehouse, tile, -1, -1);
 }
 
 int SwapTiles(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], Point p1, Point p2) {
@@ -286,7 +286,7 @@ int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
     static int targetsCovered, totalTargets;
     if (!totalTargets) {
         // count total number of targets
-        totalTargets = countInWarehouse3(warehouse, TARGET, BOX_ON_TARGET, WORKER_ON_TARGET);
+        totalTargets = CountInWarehouse3(warehouse, TARGET, BOX_ON_TARGET, WORKER_ON_TARGET);
     }
 
     // find location of worker
