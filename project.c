@@ -34,20 +34,35 @@ typedef struct {
 /**
  * BubbleSort sorts an array of integers in ascending order.
  * 
- * @param values[] The array of integers to sort.
- * @param length The number of elements in `values`.
- */ 
+ * @param  values[]  The array of integers to sort.
+ * @param  length  The number of elements in `values`.
+ * 
+ * @algorithm  
+ */
 void BubbleSort(int values[], int length) {
-    for (int i = 0; i < length - 1; i++) {
-        for (int j = 0; j < length - 1 - i; j++) {
-            if (values[j] > values[j + 1]) {
-                // swap position of j & j+1
-                int tmp = values[j];
-                values[j] = values[j + 1];
-                values[j + 1] = tmp;
+    int swapped;
+
+    do {
+        // reset swapped flag
+        swapped = 0;
+        
+        for (int i = 1; i < length; i++) {
+            // if the pair is in the wrong order
+            if (values[i - 1] > values[i]) {
+                swapped = 1;
+
+                // swap them
+                int tmp = values[i - 1];
+                values[i - 1] = values[i];
+                values[i] = tmp;
             }
         }
-    }
+        // after each loop the last element is guaranteed to be
+        //   in the correct order (so we don't need to check it)
+        length--;
+
+    // loop until no changes are made (then sorting is complete)
+    } while (swapped);
 }
 
 int GetWarehouseTile(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], Point p) {
