@@ -47,7 +47,7 @@ Point findInWarehouse(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile) {
 	}
 }
 
-int countInWarehouse(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1, int tile2, int tile3) {
+int countInWarehouse3(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1, int tile2, int tile3) {
 	int count = 0;
 	for (int y = 0; y < WAREHOUSE_SIZE; y++) {
 		for (int x = 0; x < WAREHOUSE_SIZE; x++) {
@@ -58,11 +58,11 @@ int countInWarehouse(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1, i
 	}
 	return count;
 }
-int countInWarehouse(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1, int tile2) {
-	return countInWarehouse(warehouse, tile1, tile2, -1);
+int countInWarehouse2(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1, int tile2) {
+	return countInWarehouse3(warehouse, tile1, tile2, -1);
 }
 int countInWarehouse(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile) {
-	return countInWarehouse(warehouse, tile, -1, -1);
+	return countInWarehouse3(warehouse, tile, -1, -1);
 }
 
 int SwapTiles(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], Point p1, Point p2) {
@@ -243,35 +243,22 @@ be written in your own words
 */
 void WorkerRoute(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE]) {
     // find location of worker and box
-    int workerX, workerY, boxX, boxY;
-    for (int y = 0; y < WAREHOUSE_SIZE; y++) {
-        for (int x = 0; x < WAREHOUSE_SIZE; x++) {
-            // check if it is the worker
-            if (warehouse[y][x] == 1) {
-                workerX = x;
-                workerY = y;
-            }
-            // check if it is the box
-            else if (warehouse[y][x] == 2) {
-                boxX = x;
-                boxY = y;
-            }
-        }
-    }
+    Point worker = findInWarehouse(warehouse, 1);
+	Point box = findInWarehouse(warehouse, 2);
 
     // draw path horizontally
-    for (int x = MIN(workerX, boxX) + 1; x < MAX(workerX, boxX); x++) {
-        warehouse[workerY][x] = 3;
+    for (int x = MIN(worker.x, box.x) + 1; x < MAX(worker.x, box.x); x++) {
+        warehouse[worker.y][x] = 3;
     }
 
     // draw path vertically
-    for (int y = MIN(workerY, boxY) + 1; y < MAX(workerY, boxY); y++) {
-        warehouse[y][boxX] = 3;
+    for (int y = MIN(worker.y, box.y) + 1; y < MAX(worker.y, box.y); y++) {
+        warehouse[y][box.x] = 3;
     }
 
     // add in the intersection/corner (if the worker and box aren't there)
-    if (warehouse[workerY][boxX] == 0) {
-        warehouse[workerY][boxX] = 3;
+    if (warehouse[worker.y][box.x] == 0) {
+        warehouse[worker.y][box.x] = 3;
     }
 }
 
@@ -284,86 +271,70 @@ int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
     static int targetsCovered, totalTargets;
     if (!totalTargets) {
         // count total number of targets
-        for (int y = 0; y < WAREHOUSE_SIZE; y++) {
-            for (int x = 0; x < WAREHOUSE_SIZE; x++) {
-                // check if it is a target
-                if (warehouse[y][x] == TARGET || warehouse[y][x] == WORKER_ON_TARGET || warehouse[y][x] == BOX_ON_TARGET) {
-                    totalTargets++;
-                }
-            }
-        }
+        totalTargets = countInWarehouse3(warehouse, TARGET, BOX_ON_TARGET, WORKER_ON_TARGET);
     }
 
     // find location of worker
-    int workerX, workerY;
-    for (int y = 0; y < WAREHOUSE_SIZE; y++) {
-        for (int x = 0; x < WAREHOUSE_SIZE; x++) {
-            // check if it is the worker
-            if (warehouse[y][x] == WORKER) {
-                workerX = x;
-                workerY = y;
-            }
-        }
-    }
+    Point worker = findInWarehouse(warehouse, WORKER);
 
     switch (move) {
         // up
         case 'w': {
-            if (warehouse[workerY - 1][workerX] == BOX) {
-                if (warehouse[workerY - 2][workerX] == SPACE) {
-                    warehouse[workerY - 2][workerX] = BOX;
-                    warehouse[workerY - 1][workerX] = WORKER;
-                    warehouse[workerY][workerX] = SPACE;
+            if (warehouse[worker.y - 1][worker.x] == BOX) {
+                if (warehouse[worker.y - 2][worker.x] == SPACE) {
+                    warehouse[worker.y - 2][worker.x] = BOX;
+                    warehouse[worker.y - 1][worker.x] = WORKER;
+                    warehouse[worker.y][worker.x] = SPACE;
                 }
             }
-            else if (warehouse[workerY - 1][workerX] == SPACE) {
-                warehouse[workerY - 1][workerX] = WORKER;
-                warehouse[workerY][workerX] = SPACE;
+            else if (warehouse[worker.y - 1][worker.x] == SPACE) {
+                warehouse[worker.y - 1][worker.x] = WORKER;
+                warehouse[worker.y][worker.x] = SPACE;
             }
             break;
         }
         // left
         case 'a': {
-            if (warehouse[workerY][workerX - 1] == BOX) {
-                if (warehouse[workerY][workerX - 2] == SPACE) {
-                    warehouse[workerY][workerX - 2] = BOX;
-                    warehouse[workerY][workerX - 1] = WORKER;
-                    warehouse[workerY][workerX] = SPACE;
+            if (warehouse[worker.y][worker.x - 1] == BOX) {
+                if (warehouse[worker.y][worker.x - 2] == SPACE) {
+                    warehouse[worker.y][worker.x - 2] = BOX;
+                    warehouse[worker.y][worker.x - 1] = WORKER;
+                    warehouse[worker.y][worker.x] = SPACE;
                 }
             }
-            else if (warehouse[workerY][workerX - 1] == SPACE) {
-                warehouse[workerY][workerX - 1] = WORKER;
-                warehouse[workerY][workerX] = SPACE;
+            else if (warehouse[worker.y][worker.x - 1] == SPACE) {
+                warehouse[worker.y][worker.x - 1] = WORKER;
+                warehouse[worker.y][worker.x] = SPACE;
             }
             break;
         }
         // down
         case 's': {
-            if (warehouse[workerY + 1][workerX] == BOX) {
-                if (warehouse[workerY + 2][workerX] == SPACE) {
-                    warehouse[workerY + 2][workerX] = BOX;
-                    warehouse[workerY + 1][workerX] = WORKER;
-                    warehouse[workerY][workerX] = SPACE;
+            if (warehouse[worker.y + 1][worker.x] == BOX) {
+                if (warehouse[worker.y + 2][worker.x] == SPACE) {
+                    warehouse[worker.y + 2][worker.x] = BOX;
+                    warehouse[worker.y + 1][worker.x] = WORKER;
+                    warehouse[worker.y][worker.x] = SPACE;
                 }
             }
-            else if (warehouse[workerY + 1][workerX] == SPACE) {
-                warehouse[workerY + 1][workerX] = WORKER;
-                warehouse[workerY][workerX] = SPACE;
+            else if (warehouse[worker.y + 1][worker.x] == SPACE) {
+                warehouse[worker.y + 1][worker.x] = WORKER;
+                warehouse[worker.y][worker.x] = SPACE;
             }
             break;
         }
         // right
         case 'd': {
-            if (warehouse[workerY][workerX + 1] == BOX) {
-                if (warehouse[workerY][workerX + 2] == SPACE) {
-                    warehouse[workerY][workerX + 2] = BOX;
-                    warehouse[workerY][workerX + 1] = WORKER;
-                    warehouse[workerY][workerX] = SPACE;
+            if (warehouse[worker.y][worker.x + 1] == BOX) {
+                if (warehouse[worker.y][worker.x + 2] == SPACE) {
+                    warehouse[worker.y][worker.x + 2] = BOX;
+                    warehouse[worker.y][worker.x + 1] = WORKER;
+                    warehouse[worker.y][worker.x] = SPACE;
                 }
             }
-            else if (warehouse[workerY][workerX + 1] == SPACE) {
-                warehouse[workerY][workerX + 1] = WORKER;
-                warehouse[workerY][workerX] = SPACE;
+            else if (warehouse[worker.y][worker.x + 1] == SPACE) {
+                warehouse[worker.y][worker.x + 1] = WORKER;
+                warehouse[worker.y][worker.x] = SPACE;
             }
             break;
         }
