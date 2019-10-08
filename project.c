@@ -8,10 +8,19 @@
 \*/ 
 
 #include "project.h"
+
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
 #define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
 #define ABS(X) ((X > 0) ? (X) : -(X))
-#define DEBUG 1
+
+// define Point struct in project.h
+// if I submit this by accident then it will still work
+#ifndef PROJECT_H_POINT
+typedef struct { 
+   int y;
+   int x;
+} Point;
+#endif
 
 void BubbleSort(int values[], int length) {
     for (int i = 0; i < length - 1; i++) {
@@ -24,14 +33,7 @@ void BubbleSort(int values[], int length) {
             }
         }
     }
-} 
-
-/* DEFINED IN project.h 
-typedef struct  { 
-   int y;
-   int x;
-} Point;
-*/
+}
 
 int GetWarehouseTile(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], Point p) {
     return warehouse[p.y][p.x];
@@ -77,7 +79,7 @@ int CompareInts(const void *aPointer, const void *bPointer) {
 }
 
 Point FindInWarehouse3(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1, int tile2, int tile3) {
-    Point p = { -1 };
+    Point p = { -1, -1 };
     for (int y = 0; y < WAREHOUSE_SIZE; y++) {
         for (int x = 0; x < WAREHOUSE_SIZE; x++) {
             if (warehouse[y][x] == tile1 || warehouse[y][x] == tile2 || warehouse[y][x] == tile3) {
@@ -168,8 +170,6 @@ int SwapTiles(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], Point p1, Point p2)
             return 3;
         }
     }
-
-    if (DEBUG) printf("Swapping (%c, %c)\n", GetTileChar(p1Value), GetTileChar(p2Value));
 
     // swap
     int p1NewValue = p2Value;
@@ -363,8 +363,7 @@ int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
     // p2 is the location the worker will move to
     // p3 is the location the box will move to (if we are pushing a box)
     Point p2, p3;
-    p2.y = p3.y = worker.y;
-    p2.x = p3.x = worker.x;
+    p2 = p3 = worker;
 
     switch (move) {
         // up
@@ -393,21 +392,18 @@ int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
         }
     }
 
-    // perform the move
-    int result = 0;
+    // if we are pushing a box, move that first
     if (TileIsBox(warehouse[p2.y][p2.x])) {
-        if (DEBUG) printf("pushingBox\n");
-        result = SwapTiles(warehouse, p2, p3);
-        if (result != 0) {
-            if (DEBUG) printf("First move failed with error code: %d\n", result);
+        // SwapTiles returns non-zero error codes
+        if (SwapTiles(warehouse, p2, p3) != 0) {
+            // if there was an error, then nothing changed
+            return 0;
         }
     }
-    if (result == 0) {
-        result = SwapTiles(warehouse, worker, p2);
-        if (result == 0) {
-            // update what tile our worker is sitting on
-            worker = p2;
-        }
+    // move the person to where the box was
+    if (SwapTiles(warehouse, worker, p2) == 0) {
+        // update what tile our worker is sitting on
+        worker = p2;
     }
     
     // finished if the worker is standing on a target and there are zero un-covered targets

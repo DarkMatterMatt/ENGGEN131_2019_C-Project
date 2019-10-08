@@ -28,6 +28,7 @@ int MakeMove(int warehouse[10][10], char move);
 
 /*********************************************************************************/
 
+#define PROJECT_H_POINT
 typedef struct { 
    int y;
    int x;
