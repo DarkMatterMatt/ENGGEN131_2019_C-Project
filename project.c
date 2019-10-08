@@ -11,6 +11,7 @@
 #include "project.h"
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
 #define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
+#define DEBUG 1
 
 /* DEFINED IN project.h 
 typedef struct  { 
@@ -18,6 +19,34 @@ typedef struct  {
    int x;
 } Point;
 */
+
+int GetWarehouseTile(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], Point p) {
+	return warehouse[p.y][p.x];
+}
+
+char GetTileChar(int tile) {
+	switch (tile) {
+		case 0:
+			return '_';
+		case 1:
+			return '#';
+		case 2:
+			return '*';
+		case 3:
+			return 'O';
+		case 4:
+			return 'o';
+		case 5:
+			return 'X';
+		case 6:
+			return 'x';
+	}
+	return '!';
+}
+
+int GetWarehouseChar(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], Point p) {
+	return GetTileChar(warehouse[p.y][p.x]);
+}
 
 int IsPrime(int num) {
     for (int i = 2; i * i <= num; i++) {
@@ -45,12 +74,23 @@ Point FindInWarehouse3(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1,
 			}
 		}
 	}
+	return p;
 }
 Point FindInWarehouse2(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1, int tile2) {
 	return FindInWarehouse3(warehouse, tile1, tile2, -1);
 }
 Point FindInWarehouse(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile) {
 	return FindInWarehouse3(warehouse, tile, -1, -1);
+}
+
+int tileIsBox(int tile) {
+	return tile == BOX || tile == BOX_ON_TARGET;
+}
+int tileIsWorker(int tile) {
+	return tile == WORKER || tile == WORKER_ON_TARGET;
+}
+int tileIsTarget(int tile) {
+	return tile == TARGET || tile == BOX_ON_TARGET || tile == WORKER_ON_TARGET;
 }
 
 int CountInWarehouse3(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1, int tile2, int tile3) {
@@ -81,21 +121,19 @@ int SwapTiles(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], Point p1, Point p2)
     }
 
 	// fail if trying to swap a box with a worker or another box
-	if (p1Value == BOX || p1Value == BOX_ON_TARGET) {
-		if (p2Value == BOX || p2Value == BOX_ON_TARGET || p2Value == WORKER || p2Value == WORKER_ON_TARGET) {
-			return 1;
+	if (tileIsBox(p1Value)) {
+		if (tileIsBox(p2Value) || tileIsWorker(p2Value)) {
+			return 2;
 		}
 	}
 	// fail if trying to swap a box with a worker or another box
-	if (p2Value == BOX || p2Value == BOX_ON_TARGET) {
-		if (p1Value == BOX || p1Value == BOX_ON_TARGET || p1Value == WORKER || p1Value == WORKER_ON_TARGET) {
-			return 1;
+	if (tileIsBox(p2Value)) {
+		if (tileIsBox(p1Value) || tileIsWorker(p1Value)) {
+			return 3;
 		}
 	}
 
-    // check if moving off/onto a target
-    int p1IsTarget = p1Value == TARGET || p1Value == BOX_ON_TARGET || p1Value == WORKER_ON_TARGET;
-    int p2IsTarget = p2Value == TARGET || p2Value == BOX_ON_TARGET || p2Value == WORKER_ON_TARGET;
+	if (DEBUG) printf("Swapping (%c, %c)\n", GetTileChar(p1Value), GetTileChar(p2Value));
 
     // remove the 'on target' modifier from the source values
     if (p1Value == TARGET)           p1Value = SPACE;
@@ -106,12 +144,12 @@ int SwapTiles(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], Point p1, Point p2)
     if (p2Value == WORKER_ON_TARGET) p2Value = WORKER;
 
     // add the 'on target' modifier to the destination values
-    if (p2IsTarget) {
+    if (tileIsTarget(p2Value)) {
         if (p1Value == SPACE)  p1Value = TARGET;
         if (p1Value == BOX)    p1Value = BOX_ON_TARGET;
         if (p1Value == WORKER) p1Value = WORKER_ON_TARGET;
     }
-    if (p1IsTarget) {
+    if (tileIsTarget(p1Value)) {
         if (p2Value == SPACE)  p2Value = TARGET;
         if (p2Value == BOX)    p2Value = BOX_ON_TARGET;
         if (p2Value == WORKER) p2Value = WORKER_ON_TARGET;
@@ -310,8 +348,8 @@ int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
     switch (move) {
         // up
         case 'w': {
-			p2.y = worker.y - 1;
-            if (warehouse[p2.y][p2.x] == BOX) {
+			p2.y -= 1;
+            if (warehouse[p2.y][p2.x] == BOX || warehouse[p2.y][p2.x] == BOX_ON_TARGET) {
 				pushingBox = 1;
 				p3.y -= 2;
             }
@@ -319,8 +357,8 @@ int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
         }
         // left
         case 'a': {
-			p2.x = worker.x - 1;
-            if (warehouse[p2.y][p2.x] == BOX) {
+			p2.x -= 1;
+            if (warehouse[p2.y][p2.x] == BOX || warehouse[p2.y][p2.x] == BOX_ON_TARGET) {
 				pushingBox = 1;
 				p3.x -= 2;
             }
@@ -328,8 +366,8 @@ int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
         }
         // down
         case 's': {
-			p2.y = worker.y + 1;
-            if (warehouse[p2.y][p2.x] == BOX) {
+			p2.y += 1;
+            if (warehouse[p2.y][p2.x] == BOX || warehouse[p2.y][p2.x] == BOX_ON_TARGET) {
 				pushingBox = 1;
 				p3.y += 2;
             }
@@ -337,8 +375,8 @@ int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
         }
         // right
         case 'd': {
-			p2.x = worker.x + 1;
-            if (warehouse[p2.y][p2.x] == BOX) {
+			p2.x += 1;
+            if (warehouse[p2.y][p2.x] == BOX || warehouse[p2.y][p2.x] == BOX_ON_TARGET) {
 				pushingBox = 1;
 				p3.x += 2;
             }
@@ -349,16 +387,16 @@ int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
 	// perform the move
 	int result = 0;
 	if (pushingBox) {
-		printf("pushingBox\n");
+		if (DEBUG) printf("pushingBox\n");
 		result = SwapTiles(warehouse, p2, p3);
 		if (result != 0) {
-			printf("First move failed!\n");
+			if (DEBUG) printf("First move failed with error code: %d\n", result);
 		}
 	}
 	if (result == 0) {
 		result = SwapTiles(warehouse, worker, p2);
 		if (result != 0) {
-			printf("Second move failed!\n");
+			if (DEBUG) printf("Second move failed with error code: %d\n", result);
 		}
 	}
 

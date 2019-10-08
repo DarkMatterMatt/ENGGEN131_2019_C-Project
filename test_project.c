@@ -6,34 +6,6 @@ Program to test the functions defined in the "project.c" source file
 */
 #include "project.h"
 
-int GetWarehouseTile(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], Point p) {
-	return warehouse[p.y][p.x];
-}
-
-char GetTileChar(int tile) {
-	switch (tile) {
-		case 0:
-			return '_';
-		case 1:
-			return '#';
-		case 2:
-			return '*';
-		case 3:
-			return 'O';
-		case 4:
-			return 'o';
-		case 5:
-			return 'X';
-		case 6:
-			return 'x';
-	}
-	return '!';
-}
-
-int GetWarehouseChar(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], Point p) {
-	return GetTileChar(warehouse[p.y][p.x]);
-}
-
 void MyTestFunction(int task) {
 	// An example of code that you could use to test Task One.
 	// You should write additional tests of your own
