@@ -7,7 +7,7 @@
  * ID #: 194231692
 \*/ 
 
-#include <stdlib.h>
+#include <stdlib.h> /* THIS LIBRARY IS NOT ALLOWED */
 #include "project.h"
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
 #define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
@@ -32,6 +32,29 @@ int CompareInts(const void *aPointer, const void *bPointer) {
     int a = *((int*) aPointer);
     int b = *((int*) bPointer);
     return (a > b) - (a < b);
+}
+
+Point findInWarehouse(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile) {
+	Point p = { -1 };
+	for (int y = 0; y < WAREHOUSE_SIZE; y++) {
+		for (int x = 0; x < WAREHOUSE_SIZE; x++) {
+			if (warehouse[y][x] == tile) {
+				p.y = y;
+				p.x = x;
+				return p;
+			}
+		}
+	}
+}
+
+int countInWarehouse(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile) {
+	int count = 0;
+	for (int y = 0; y < WAREHOUSE_SIZE; y++) {
+		for (int x = 0; x < WAREHOUSE_SIZE; x++) {
+			if (warehouse[y][x] == tile) count++;
+		}
+	}
+	return count;
 }
 
 int SwapTiles(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], Point p1, Point p2) {
