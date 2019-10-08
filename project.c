@@ -349,7 +349,7 @@ int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
         // up
         case 'w': {
 			p2.y -= 1;
-            if (warehouse[p2.y][p2.x] == BOX || warehouse[p2.y][p2.x] == BOX_ON_TARGET) {
+            if (tileIsBox(warehouse[p2.y][p2.x])) {
 				pushingBox = 1;
 				p3.y -= 2;
             }
@@ -358,7 +358,7 @@ int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
         // left
         case 'a': {
 			p2.x -= 1;
-            if (warehouse[p2.y][p2.x] == BOX || warehouse[p2.y][p2.x] == BOX_ON_TARGET) {
+            if (tileIsBox(warehouse[p2.y][p2.x])) {
 				pushingBox = 1;
 				p3.x -= 2;
             }
@@ -367,7 +367,7 @@ int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
         // down
         case 's': {
 			p2.y += 1;
-            if (warehouse[p2.y][p2.x] == BOX || warehouse[p2.y][p2.x] == BOX_ON_TARGET) {
+            if (tileIsBox(warehouse[p2.y][p2.x])) {
 				pushingBox = 1;
 				p3.y += 2;
             }
@@ -376,7 +376,7 @@ int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
         // right
         case 'd': {
 			p2.x += 1;
-            if (warehouse[p2.y][p2.x] == BOX || warehouse[p2.y][p2.x] == BOX_ON_TARGET) {
+            if (tileIsBox(warehouse[p2.y][p2.x])) {
 				pushingBox = 1;
 				p3.x += 2;
             }
