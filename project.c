@@ -14,16 +14,16 @@
 #define DEBUG 1
 
 void BubbleSort(int values[], int length) {
-	for (int i = 0; i < length - 1; i++) {
-		for (int j = 0; j < length - 1 - i; j++) {
-			if (values[j] > values[j + 1]) {
-				// swap position of j & j+1
-				int tmp = values[j];
-				values[j] = values[j + 1];
-				values[j + 1] = tmp;
-			}
-		}
-	}
+    for (int i = 0; i < length - 1; i++) {
+        for (int j = 0; j < length - 1 - i; j++) {
+            if (values[j] > values[j + 1]) {
+                // swap position of j & j+1
+                int tmp = values[j];
+                values[j] = values[j + 1];
+                values[j + 1] = tmp;
+            }
+        }
+    }
 } 
 
 /* DEFINED IN project.h 
@@ -34,31 +34,31 @@ typedef struct  {
 */
 
 int GetWarehouseTile(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], Point p) {
-	return warehouse[p.y][p.x];
+    return warehouse[p.y][p.x];
 }
 
 char GetTileChar(int tile) {
-	switch (tile) {
-		case 0:
-			return '_';
-		case 1:
-			return '#';
-		case 2:
-			return '*';
-		case 3:
-			return 'O';
-		case 4:
-			return 'o';
-		case 5:
-			return 'X';
-		case 6:
-			return 'x';
-	}
-	return '!';
+    switch (tile) {
+        case 0:
+            return '_';
+        case 1:
+            return '#';
+        case 2:
+            return '*';
+        case 3:
+            return 'O';
+        case 4:
+            return 'o';
+        case 5:
+            return 'X';
+        case 6:
+            return 'x';
+    }
+    return '!';
 }
 
 int GetWarehouseChar(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], Point p) {
-	return GetTileChar(warehouse[p.y][p.x]);
+    return GetTileChar(warehouse[p.y][p.x]);
 }
 
 int IsPrime(int num) {
@@ -77,74 +77,74 @@ int CompareInts(const void *aPointer, const void *bPointer) {
 }
 
 Point FindInWarehouse3(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1, int tile2, int tile3) {
-	Point p = { -1 };
-	for (int y = 0; y < WAREHOUSE_SIZE; y++) {
-		for (int x = 0; x < WAREHOUSE_SIZE; x++) {
-			if (warehouse[y][x] == tile1 || warehouse[y][x] == tile2 || warehouse[y][x] == tile3) {
-				p.y = y;
-				p.x = x;
-				return p;
-			}
-		}
-	}
-	return p;
+    Point p = { -1 };
+    for (int y = 0; y < WAREHOUSE_SIZE; y++) {
+        for (int x = 0; x < WAREHOUSE_SIZE; x++) {
+            if (warehouse[y][x] == tile1 || warehouse[y][x] == tile2 || warehouse[y][x] == tile3) {
+                p.y = y;
+                p.x = x;
+                return p;
+            }
+        }
+    }
+    return p;
 }
 Point FindInWarehouse2(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1, int tile2) {
-	return FindInWarehouse3(warehouse, tile1, tile2, -1);
+    return FindInWarehouse3(warehouse, tile1, tile2, -1);
 }
 Point FindInWarehouse(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile) {
-	return FindInWarehouse3(warehouse, tile, -1, -1);
+    return FindInWarehouse3(warehouse, tile, -1, -1);
 }
 
 int TileIsBox(int tile) {
-	return tile == BOX || tile == BOX_ON_TARGET;
+    return tile == BOX || tile == BOX_ON_TARGET;
 }
 int TileIsWorker(int tile) {
-	return tile == WORKER || tile == WORKER_ON_TARGET;
+    return tile == WORKER || tile == WORKER_ON_TARGET;
 }
 int TileIsTarget(int tile) {
-	return tile == TARGET || tile == BOX_ON_TARGET || tile == WORKER_ON_TARGET;
+    return tile == TARGET || tile == BOX_ON_TARGET || tile == WORKER_ON_TARGET;
 }
 
 void AddTargetToTile(int *tile) {
-	if (TileIsBox(*tile)) {
-		*tile = BOX_ON_TARGET;
-	}
-	else if (TileIsWorker(*tile)) {
-		*tile = WORKER_ON_TARGET;
-	}
-	else {
-		*tile = TARGET;
-	}
+    if (TileIsBox(*tile)) {
+        *tile = BOX_ON_TARGET;
+    }
+    else if (TileIsWorker(*tile)) {
+        *tile = WORKER_ON_TARGET;
+    }
+    else {
+        *tile = TARGET;
+    }
 }
 void RemoveTargetFromTile(int *tile) {
-	if (TileIsBox(*tile)) {
-		*tile = BOX;
-	}
-	else if (TileIsWorker(*tile)) {
-		*tile = WORKER;
-	}
-	else {
-		*tile = SPACE;
-	}
+    if (TileIsBox(*tile)) {
+        *tile = BOX;
+    }
+    else if (TileIsWorker(*tile)) {
+        *tile = WORKER;
+    }
+    else {
+        *tile = SPACE;
+    }
 }
 
 int CountInWarehouse3(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1, int tile2, int tile3) {
-	int count = 0;
-	for (int y = 0; y < WAREHOUSE_SIZE; y++) {
-		for (int x = 0; x < WAREHOUSE_SIZE; x++) {
-			if (warehouse[y][x] == tile1 || warehouse[y][x] == tile2 || warehouse[y][x] == tile3) {
-				count++;
-			}
-		}
-	}
-	return count;
+    int count = 0;
+    for (int y = 0; y < WAREHOUSE_SIZE; y++) {
+        for (int x = 0; x < WAREHOUSE_SIZE; x++) {
+            if (warehouse[y][x] == tile1 || warehouse[y][x] == tile2 || warehouse[y][x] == tile3) {
+                count++;
+            }
+        }
+    }
+    return count;
 }
 int CountInWarehouse2(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1, int tile2) {
-	return CountInWarehouse3(warehouse, tile1, tile2, -1);
+    return CountInWarehouse3(warehouse, tile1, tile2, -1);
 }
 int CountInWarehouse(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile) {
-	return CountInWarehouse3(warehouse, tile, -1, -1);
+    return CountInWarehouse3(warehouse, tile, -1, -1);
 }
 
 int SwapTiles(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], Point p1, Point p2) {
@@ -156,31 +156,31 @@ int SwapTiles(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], Point p1, Point p2)
         return 1;
     }
 
-	// fail if trying to swap a box with a worker or another box
-	if (TileIsBox(p1Value)) {
-		if (TileIsBox(p2Value) || TileIsWorker(p2Value)) {
-			return 2;
-		}
-	}
-	// fail if trying to swap a box with a worker or another box
-	if (TileIsBox(p2Value)) {
-		if (TileIsBox(p1Value) || TileIsWorker(p1Value)) {
-			return 3;
-		}
-	}
+    // fail if trying to swap a box with a worker or another box
+    if (TileIsBox(p1Value)) {
+        if (TileIsBox(p2Value) || TileIsWorker(p2Value)) {
+            return 2;
+        }
+    }
+    // fail if trying to swap a box with a worker or another box
+    if (TileIsBox(p2Value)) {
+        if (TileIsBox(p1Value) || TileIsWorker(p1Value)) {
+            return 3;
+        }
+    }
 
-	if (DEBUG) printf("Swapping (%c, %c)\n", GetTileChar(p1Value), GetTileChar(p2Value));
+    if (DEBUG) printf("Swapping (%c, %c)\n", GetTileChar(p1Value), GetTileChar(p2Value));
 
-	// swap
-	int p1NewValue = p2Value;
-	int p2NewValue = p1Value;
+    // swap
+    int p1NewValue = p2Value;
+    int p2NewValue = p1Value;
 
     // remove the 'on target' modifier from the source values
     RemoveTargetFromTile(&p1NewValue);
     RemoveTargetFromTile(&p2NewValue);
 
-	// if the original p1 tile was a target (or a box/worker on top of a target)
-	// add the 'on target' modifier to the destination values
+    // if the original p1 tile was a target (or a box/worker on top of a target)
+    // add the 'on target' modifier to the destination values
     if (TileIsTarget(p1Value)) AddTargetToTile(&p1NewValue);
     if (TileIsTarget(p2Value)) AddTargetToTile(&p2NewValue);
 
@@ -188,7 +188,7 @@ int SwapTiles(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], Point p1, Point p2)
     warehouse[p1.y][p1.x] = p1NewValue;
     warehouse[p2.y][p2.x] = p2NewValue;
 
-	return 0;
+    return 0;
 }
 
 /*
@@ -260,7 +260,7 @@ int WinningBid(int *values, int length) {
     }
 
     // sort bids ascending
-	BubbleSort(values, length);
+    BubbleSort(values, length);
 
     // check if lowest bid is unique
     if (values[0] != values[1]) {
@@ -332,7 +332,7 @@ be written in your own words
 void WorkerRoute(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE]) {
     // find location of worker and box
     Point worker = FindInWarehouse(warehouse, 1);
-	Point box = FindInWarehouse(warehouse, 2);
+    Point box = FindInWarehouse(warehouse, 2);
 
     // draw path horizontally
     for (int x = MIN(worker.x, box.x) + 1; x < MAX(worker.x, box.x); x++) {
@@ -359,60 +359,60 @@ int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
     // find location of worker
     Point worker = FindInWarehouse2(warehouse, WORKER, WORKER_ON_TARGET);
 
-	// these points hold the locations we will travel to
-	// p2 is the location the worker will move to
-	// p3 is the location the box will move to (if we are pushing a box)
-	Point p2, p3;
-	p2.y = p3.y = worker.y;
-	p2.x = p3.x = worker.x;
+    // these points hold the locations we will travel to
+    // p2 is the location the worker will move to
+    // p3 is the location the box will move to (if we are pushing a box)
+    Point p2, p3;
+    p2.y = p3.y = worker.y;
+    p2.x = p3.x = worker.x;
 
     switch (move) {
         // up
         case 'w': {
-			p2.y -= 1;
-			p3.y -= 2;
+            p2.y -= 1;
+            p3.y -= 2;
             break;
         }
         // left
         case 'a': {
-			p2.x -= 1;
-			p3.x -= 2;
+            p2.x -= 1;
+            p3.x -= 2;
             break;
         }
         // down
         case 's': {
-			p2.y += 1;
-			p3.y += 2;
+            p2.y += 1;
+            p3.y += 2;
             break;
         }
         // right
         case 'd': {
-			p2.x += 1;
-			p3.x += 2;
+            p2.x += 1;
+            p3.x += 2;
             break;
         }
     }
 
-	// perform the move
-	int result = 0;
-	if (TileIsBox(warehouse[p2.y][p2.x])) {
-		if (DEBUG) printf("pushingBox\n");
-		result = SwapTiles(warehouse, p2, p3);
-		if (result != 0) {
-			if (DEBUG) printf("First move failed with error code: %d\n", result);
-		}
-	}
-	if (result == 0) {
-		result = SwapTiles(warehouse, worker, p2);
-		if (result == 0) {
-			// update what tile our worker is sitting on
-			worker = p2;
-		}
-	}
-	
-	// finished if the worker is standing on a target and there are zero un-covered targets
+    // perform the move
+    int result = 0;
+    if (TileIsBox(warehouse[p2.y][p2.x])) {
+        if (DEBUG) printf("pushingBox\n");
+        result = SwapTiles(warehouse, p2, p3);
+        if (result != 0) {
+            if (DEBUG) printf("First move failed with error code: %d\n", result);
+        }
+    }
+    if (result == 0) {
+        result = SwapTiles(warehouse, worker, p2);
+        if (result == 0) {
+            // update what tile our worker is sitting on
+            worker = p2;
+        }
+    }
+    
+    // finished if the worker is standing on a target and there are zero un-covered targets
     if (warehouse[worker.y][worker.x] == WORKER_ON_TARGET 
-			&& CountInWarehouse(warehouse, TARGET) == 0) {
+            && CountInWarehouse(warehouse, TARGET) == 0) {
         return 1;
     }
 
