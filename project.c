@@ -69,10 +69,23 @@ int SwapTiles(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], Point p1, Point p2)
     int p1Value = warehouse[p1.y][p1.x];
     int p2Value = warehouse[p2.y][p2.x];
 
-    // fail if tring to move into a wall
+    // fail if trying to move into a wall
     if (p1Value == WALL || p2Value == WALL) {
         return 1;
     }
+
+	// fail if trying to swap a box with a worker or another box
+	if (p1Value == BOX || p1Value == BOX_ON_TARGET) {
+		if (p2Value == BOX || p2Value == BOX_ON_TARGET || p2Value == WORKER || p2Value == WORKER_ON_TARGET) {
+			return 1;
+		}
+	}
+	// fail if trying to swap a box with a worker or another box
+	if (p2Value == BOX || p2Value == BOX_ON_TARGET) {
+		if (p1Value == BOX || p1Value == BOX_ON_TARGET || p1Value == WORKER || p1Value == WORKER_ON_TARGET) {
+			return 1;
+		}
+	}
 
     // check if moving off/onto a target
     int p1IsTarget = p1Value == TARGET || p1Value == BOX_ON_TARGET || p1Value == WORKER_ON_TARGET;
@@ -101,6 +114,8 @@ int SwapTiles(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], Point p1, Point p2)
     // assign values to the warehouse
     warehouse[p1.y][p1.x] = p2Value;
     warehouse[p2.y][p2.x] = p1Value;
+
+	return 0;
 }
 
 /*
@@ -277,68 +292,66 @@ int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
     // find location of worker
     Point worker = findInWarehouse(warehouse, WORKER);
 
+	// these points hold the locations we will travel to
+	// p2 is the location the worker will move to
+	// p3 is the location the box will move to (if we are pushing a box)
+	Point p2, p3;
+	p2.y = p3.y = worker.y;
+	p2.x = p3.x = worker.x;
+
+	// determine if we are pushing a box or not
+	int pushingBox = 0;
     switch (move) {
         // up
         case 'w': {
-            if (warehouse[worker.y - 1][worker.x] == BOX) {
-                if (warehouse[worker.y - 2][worker.x] == SPACE) {
-                    warehouse[worker.y - 2][worker.x] = BOX;
-                    warehouse[worker.y - 1][worker.x] = WORKER;
-                    warehouse[worker.y][worker.x] = SPACE;
-                }
-            }
-            else if (warehouse[worker.y - 1][worker.x] == SPACE) {
-                warehouse[worker.y - 1][worker.x] = WORKER;
-                warehouse[worker.y][worker.x] = SPACE;
+			p2.y = worker.y - 1;
+            if (warehouse[p2.y][p2.x] == BOX) {
+				pushingBox = 1;
+				p3.y -= 2;
             }
             break;
         }
         // left
         case 'a': {
-            if (warehouse[worker.y][worker.x - 1] == BOX) {
-                if (warehouse[worker.y][worker.x - 2] == SPACE) {
-                    warehouse[worker.y][worker.x - 2] = BOX;
-                    warehouse[worker.y][worker.x - 1] = WORKER;
-                    warehouse[worker.y][worker.x] = SPACE;
-                }
-            }
-            else if (warehouse[worker.y][worker.x - 1] == SPACE) {
-                warehouse[worker.y][worker.x - 1] = WORKER;
-                warehouse[worker.y][worker.x] = SPACE;
+			p2.x = worker.x - 1;
+            if (warehouse[p2.y][p2.x] == BOX) {
+				pushingBox = 1;
+				p3.x -= 2;
             }
             break;
         }
         // down
         case 's': {
-            if (warehouse[worker.y + 1][worker.x] == BOX) {
-                if (warehouse[worker.y + 2][worker.x] == SPACE) {
-                    warehouse[worker.y + 2][worker.x] = BOX;
-                    warehouse[worker.y + 1][worker.x] = WORKER;
-                    warehouse[worker.y][worker.x] = SPACE;
-                }
-            }
-            else if (warehouse[worker.y + 1][worker.x] == SPACE) {
-                warehouse[worker.y + 1][worker.x] = WORKER;
-                warehouse[worker.y][worker.x] = SPACE;
+			p2.y = worker.y + 1;
+            if (warehouse[p2.y][p2.x] == BOX) {
+				pushingBox = 1;
+				p3.y += 2;
             }
             break;
         }
         // right
         case 'd': {
-            if (warehouse[worker.y][worker.x + 1] == BOX) {
-                if (warehouse[worker.y][worker.x + 2] == SPACE) {
-                    warehouse[worker.y][worker.x + 2] = BOX;
-                    warehouse[worker.y][worker.x + 1] = WORKER;
-                    warehouse[worker.y][worker.x] = SPACE;
-                }
-            }
-            else if (warehouse[worker.y][worker.x + 1] == SPACE) {
-                warehouse[worker.y][worker.x + 1] = WORKER;
-                warehouse[worker.y][worker.x] = SPACE;
+			p2.x = worker.x + 1;
+            if (warehouse[p2.y][p2.x] == BOX) {
+				pushingBox = 1;
+				p3.x += 2;
             }
             break;
         }
     }
+
+	// perform the move
+	int movesFailed = 0;
+	if (pushingBox) {
+		printf("pushingBox\n");
+		movesFailed += SwapTiles(warehouse, p2, p3);
+	}
+	if (movesFailed == 0) {
+		movesFailed += SwapTiles(warehouse, worker, p2);
+	}
+	if (movesFailed != 0) {
+		printf("%d moves failed!\n", movesFailed);
+	}
 
     return 0;
 }
