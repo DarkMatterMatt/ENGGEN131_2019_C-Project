@@ -7,11 +7,24 @@
  * ID #: 194231692
 \*/ 
 
-#include <stdlib.h> /* THIS LIBRARY IS NOT ALLOWED */
 #include "project.h"
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
 #define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
+#define ABS(X) ((X > 0) ? (X) : -(X))
 #define DEBUG 1
+
+void BubbleSort(int values[], int length) {
+	for (int i = 0; i < length - 1; i++) {
+		for (int j = 0; j < length - 1 - i; j++) {
+			if (values[j] > values[j + 1]) {
+				// swap position of j & j+1
+				int tmp = values[j];
+				values[j] = values[j + 1];
+				values[j + 1] = tmp;
+			}
+		}
+	}
+} 
 
 /* DEFINED IN project.h 
 typedef struct  { 
@@ -186,7 +199,7 @@ be written in your own words
 int TimeWorked(int minuteA, int secondA, int minuteB, int secondB) {
     int timeA = minuteA * 60 + secondA;
     int timeB = minuteB * 60 + secondB;
-    return abs(timeA - timeB);
+    return ABS(timeA - timeB);
 }
 
 /*
@@ -247,7 +260,7 @@ int WinningBid(int *values, int length) {
     }
 
     // sort bids ascending
-    qsort(values, length, sizeof(int), CompareInts);
+	BubbleSort(values, length);
 
     // check if lowest bid is unique
     if (values[0] != values[1]) {
