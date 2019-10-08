@@ -34,17 +34,23 @@ int CompareInts(const void *aPointer, const void *bPointer) {
     return (a > b) - (a < b);
 }
 
-Point findInWarehouse(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile) {
+Point FindInWarehouse3(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1, int tile2, int tile3) {
 	Point p = { -1 };
 	for (int y = 0; y < WAREHOUSE_SIZE; y++) {
 		for (int x = 0; x < WAREHOUSE_SIZE; x++) {
-			if (warehouse[y][x] == tile) {
+			if (warehouse[y][x] == tile1 || warehouse[y][x] == tile2 || warehouse[y][x] == tile3) {
 				p.y = y;
 				p.x = x;
 				return p;
 			}
 		}
 	}
+}
+Point FindInWarehouse2(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1, int tile2) {
+	return FindInWarehouse3(warehouse, tile1, tile2, -1);
+}
+Point FindInWarehouse(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile) {
+	return FindInWarehouse3(warehouse, tile, -1, -1);
 }
 
 int CountInWarehouse3(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1, int tile2, int tile3) {
@@ -258,8 +264,8 @@ be written in your own words
 */
 void WorkerRoute(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE]) {
     // find location of worker and box
-    Point worker = findInWarehouse(warehouse, 1);
-	Point box = findInWarehouse(warehouse, 2);
+    Point worker = FindInWarehouse(warehouse, 1);
+	Point box = FindInWarehouse(warehouse, 2);
 
     // draw path horizontally
     for (int x = MIN(worker.x, box.x) + 1; x < MAX(worker.x, box.x); x++) {
@@ -290,7 +296,7 @@ int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
     }
 
     // find location of worker
-    Point worker = findInWarehouse(warehouse, WORKER);
+    Point worker = FindInWarehouse2(warehouse, WORKER, WORKER_ON_TARGET);
 
 	// these points hold the locations we will travel to
 	// p2 is the location the worker will move to
@@ -341,16 +347,19 @@ int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
     }
 
 	// perform the move
-	int movesFailed = 0;
+	int result = 0;
 	if (pushingBox) {
 		printf("pushingBox\n");
-		movesFailed += SwapTiles(warehouse, p2, p3);
+		result = SwapTiles(warehouse, p2, p3);
+		if (result != 0) {
+			printf("First move failed!\n");
+		}
 	}
-	if (movesFailed == 0) {
-		movesFailed += SwapTiles(warehouse, worker, p2);
-	}
-	if (movesFailed != 0) {
-		printf("%d moves failed!\n", movesFailed);
+	if (result == 0) {
+		result = SwapTiles(warehouse, worker, p2);
+		if (result != 0) {
+			printf("Second move failed!\n");
+		}
 	}
 
     return 0;
