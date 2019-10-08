@@ -1,27 +1,42 @@
-/* ENGGEN131 Project - C Project - 2019 */
-/* The Warehouse */
-
-/*\ 
+/**
+ * ENGGEN131 Project - C Project - 2019
+ * The Warehouse
+ * 
  * AUTHOR: Matt Moran
  * USER: mmor330
  * ID #: 194231692
-\*/ 
+ */
 
 #include "project.h"
 
-#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
-#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
-#define ABS(X) ((X > 0) ? (X) : -(X))
+/**
+ * Macros for very simple math functions
+ * MAX calculates the maximum of two numbers
+ * MIN calculates the minimum of two numbers
+ * ABS calculates the absolute value of a number
+ */
+#define MIN(A, B) (((A) < (B)) ? (A) : (B))
+#define MAX(A, B) (((A) > (B)) ? (A) : (B))
+#define ABS(A) ((A > 0) ? (A) : -(A))
 
 // define Point struct in project.h
 // if I submit this by accident then it will still work
 #ifndef PROJECT_H_POINT
+/**
+ * Structure containing the position of a single point in the warehouse
+ */
 typedef struct { 
-   int y;
-   int x;
+   int y; // the y position in the warehouse, from top to bottom
+   int x; // the x position in the warehouse, from left to right
 } Point;
 #endif
 
+/**
+ * BubbleSort sorts an array of integers in ascending order.
+ * 
+ * @param values[] The array of integers to sort.
+ * @param length The number of elements in `values`.
+ */ 
 void BubbleSort(int values[], int length) {
     for (int i = 0; i < length - 1; i++) {
         for (int j = 0; j < length - 1 - i; j++) {
