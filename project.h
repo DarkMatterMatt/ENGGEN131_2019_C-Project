@@ -1,7 +1,6 @@
 /* ENGGEN131 Project - C Project - 2019 */
 /* The Warehouse */
 
-#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <string.h>
 

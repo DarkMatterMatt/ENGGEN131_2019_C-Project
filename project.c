@@ -343,12 +343,6 @@ brief summary of the algorithm you have used to solve the task (this comment mus
 be written in your own words
 */
 int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
-    static int targetsCovered, totalTargets;
-    if (!totalTargets) {
-        // count total number of targets
-        totalTargets = CountInWarehouse3(warehouse, TARGET, BOX_ON_TARGET, WORKER_ON_TARGET);
-    }
-
     // find location of worker
     Point worker = FindInWarehouse2(warehouse, WORKER, WORKER_ON_TARGET);
 
@@ -397,10 +391,17 @@ int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
 	}
 	if (result == 0) {
 		result = SwapTiles(warehouse, worker, p2);
-		if (result != 0) {
-			if (DEBUG) printf("Second move failed with error code: %d\n", result);
+		if (result == 0) {
+			// update what tile our worker is sitting on
+			worker = p2;
 		}
 	}
+	
+	// finished if the worker is standing on a target and there are zero un-covered targets
+    if (warehouse[worker.y][worker.x] == WORKER_ON_TARGET 
+			&& CountInWarehouse(warehouse, TARGET) == 0) {
+        return 1;
+    }
 
     return 0;
 }
