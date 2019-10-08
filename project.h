@@ -29,3 +29,9 @@ int MakeMove(int warehouse[10][10], char move);
 
 /*********************************************************************************/
 
+typedef struct { 
+   int y;
+   int x;
+} Point;
+
+int SwapTiles(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], Point p1, Point p2);

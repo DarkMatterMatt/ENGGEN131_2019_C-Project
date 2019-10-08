@@ -6,6 +6,34 @@ Program to test the functions defined in the "project.c" source file
 */
 #include "project.h"
 
+int GetWarehouseTile(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], Point p) {
+	return warehouse[p.y][p.x];
+}
+
+char GetTileChar(int tile) {
+	switch (tile) {
+		case 0:
+			return '_';
+		case 1:
+			return '#';
+		case 2:
+			return '*';
+		case 3:
+			return 'O';
+		case 4:
+			return 'o';
+		case 5:
+			return 'X';
+		case 6:
+			return 'x';
+	}
+	return '!';
+}
+
+int GetWarehouseChar(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], Point p) {
+	return GetTileChar(warehouse[p.y][p.x]);
+}
+
 void MyTestFunction(int task) {
 	// An example of code that you could use to test Task One.
 	// You should write additional tests of your own
@@ -208,9 +236,59 @@ void MyTestFunction(int task) {
 			}
 			break;
 		}
+
+		case 11: {
+			printf("\nTESTING SwapTiles:\n");
+			printf("=================\n");
+			
+			int warehouse[10][10] = {
+				{1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+				{1, 1, 1, 0, 0, 0, 1, 1, 1, 1},
+				{1, 2, 5, 3, 0, 0, 1, 1, 1, 1},
+				{1, 1, 1, 0, 3, 2, 1, 1, 1, 1},
+				{1, 2, 1, 1, 3, 0, 1, 1, 1, 1},
+				{1, 0, 1, 0, 2, 0, 1, 1, 1, 1},
+				{1, 3, 0, 4, 3, 3, 2, 1, 1, 1},
+				{1, 2, 0, 0, 2, 0, 0, 1, 1, 1},
+				{1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+				{1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+			};
+			Point p0 = { .x = 3, .y = 5 }; // 0 = SPACE
+			Point p1 = { .x = 0, .y = 2 }; // 1 = WALL
+			Point p2 = { .x = 1, .y = 2 }; // 2 = TARGET
+			Point p3 = { .x = 3, .y = 2 }; // 3 = BOX
+			Point p4 = { .x = 3, .y = 6 }; // 4 = BOX ON TARGET
+			Point p5 = { .x = 2, .y = 2 }; // 5 = WORKER
+
+			// swap _#
+			printf("  SwapTiles(%c, %c) = ", GetWarehouseChar(warehouse, p0), GetWarehouseChar(warehouse, p1));
+			SwapTiles(warehouse, p0, p1);
+			printf("(%c, %c)\n", GetWarehouseChar(warehouse, p0), GetWarehouseChar(warehouse, p1));
+			SwapTiles(warehouse, p0, p1);
+
+			// swap *O
+			printf("  SwapTiles(%c, %c) = ", GetWarehouseChar(warehouse, p2), GetWarehouseChar(warehouse, p3));
+			SwapTiles(warehouse, p2, p3);
+			printf("(%c, %c)\n", GetWarehouseChar(warehouse, p2), GetWarehouseChar(warehouse, p3));
+			SwapTiles(warehouse, p2, p3);
+
+			// swap XO
+			printf("  SwapTiles(%c, %c) = ", GetWarehouseChar(warehouse, p5), GetWarehouseChar(warehouse, p3));
+			SwapTiles(warehouse, p5, p3);
+			printf("(%c, %c)\n", GetWarehouseChar(warehouse, p5), GetWarehouseChar(warehouse, p3));
+			SwapTiles(warehouse, p5, p3);
+
+			// swap Xo
+			printf("  SwapTiles(%c, %c) = ", GetWarehouseChar(warehouse, p5), GetWarehouseChar(warehouse, p4));
+			SwapTiles(warehouse, p5, p4);
+			printf("(%c, %c)\n", GetWarehouseChar(warehouse, p5), GetWarehouseChar(warehouse, p4));
+			SwapTiles(warehouse, p5, p4);
+
+			printf("\n");
+			break;
+		}
 	}
 }
-
 
 //********************************************************************
 //********************************************************************
@@ -314,14 +392,14 @@ int main(void)
 	printf("\nEnter the number of the task that you would like to test:\n\n");
 	printf("  1 - 6  = this will execute the code in MyTestFunction()\n");
 	printf("  7 - 10 = this will play the Warehouse game\n");
-	while (task < 1 || task > 10) {
+	while (task < 1) {
 		printf("\nWhat task would you like to test (1, 2, 3, 4, 5, 6, 7, 8, 9 or 10)? ");
 		scanf("%d", &task);
 	}
 
 	printf("\n\nOK, testing task %d!\nGood luck!\n\n", task);
 
-	if (task < 7) {
+	if (task < 7 || task > 10) {
 		MyTestFunction(task);
 	} else {
 		printf("\nThe Warehouse game!");
