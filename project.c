@@ -93,6 +93,29 @@ int TileIsTarget(int tile) {
 	return tile == TARGET || tile == BOX_ON_TARGET || tile == WORKER_ON_TARGET;
 }
 
+void AddTargetToTile(int *tile) {
+	if (TileIsBox(*tile)) {
+		*tile = BOX_ON_TARGET;
+	}
+	else if (TileIsWorker(*tile)) {
+		*tile = WORKER_ON_TARGET;
+	}
+	else {
+		*tile = TARGET;
+	}
+}
+void RemoveTargetFromTile(int *tile) {
+	if (TileIsBox(*tile)) {
+		*tile = BOX;
+	}
+	else if (TileIsWorker(*tile)) {
+		*tile = WORKER;
+	}
+	else {
+		*tile = SPACE;
+	}
+}
+
 int CountInWarehouse3(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1, int tile2, int tile3) {
 	int count = 0;
 	for (int y = 0; y < WAREHOUSE_SIZE; y++) {
@@ -140,27 +163,13 @@ int SwapTiles(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], Point p1, Point p2)
 	int p2NewValue = p1Value;
 
     // remove the 'on target' modifier from the source values
-    if (p1NewValue == TARGET)           p1NewValue = SPACE;
-    if (p2NewValue == TARGET)           p2NewValue = SPACE;
-    if (p1NewValue == BOX_ON_TARGET)    p1NewValue = BOX;
-    if (p2NewValue == BOX_ON_TARGET)    p2NewValue = BOX;
-    if (p1NewValue == WORKER_ON_TARGET) p1NewValue = WORKER;
-    if (p2NewValue == WORKER_ON_TARGET) p2NewValue = WORKER;
+    RemoveTargetFromTile(&p1NewValue);
+    RemoveTargetFromTile(&p2NewValue);
 
 	// if the original p1 tile was a target (or a box/worker on top of a target)
-    if (TileIsTarget(p1Value)) {
-    	// add the 'on target' modifier to the destination values
-        if (p1NewValue == SPACE)  p1NewValue = TARGET;
-        if (p1NewValue == BOX)    p1NewValue = BOX_ON_TARGET;
-        if (p1NewValue == WORKER) p1NewValue = WORKER_ON_TARGET;
-    }
-	// if the original p2 tile was a target (or a box/worker on top of a target)
-    if (TileIsTarget(p2Value)) {
-    	// add the 'on target' modifier to the destination values
-        if (p2NewValue == SPACE)  p2NewValue = TARGET;
-        if (p2NewValue == BOX)    p2NewValue = BOX_ON_TARGET;
-        if (p2NewValue == WORKER) p2NewValue = WORKER_ON_TARGET;
-    }
+	// add the 'on target' modifier to the destination values
+    if (TileIsTarget(p1Value)) AddTargetToTile(&p1NewValue);
+    if (TileIsTarget(p2Value)) AddTargetToTile(&p2NewValue);
 
     // assign values to the warehouse
     warehouse[p1.y][p1.x] = p1NewValue;
