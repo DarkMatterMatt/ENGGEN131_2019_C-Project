@@ -47,14 +47,22 @@ Point findInWarehouse(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile) {
 	}
 }
 
-int countInWarehouse(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile) {
+int countInWarehouse(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1, int tile2, int tile3) {
 	int count = 0;
 	for (int y = 0; y < WAREHOUSE_SIZE; y++) {
 		for (int x = 0; x < WAREHOUSE_SIZE; x++) {
-			if (warehouse[y][x] == tile) count++;
+			if (warehouse[y][x] == tile1 || warehouse[y][x] == tile2 || warehouse[y][x] == tile3) {
+				count++;
+			}
 		}
 	}
 	return count;
+}
+int countInWarehouse(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1, int tile2) {
+	return countInWarehouse(warehouse, tile1, tile2, -1);
+}
+int countInWarehouse(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile) {
+	return countInWarehouse(warehouse, tile, -1, -1);
 }
 
 int SwapTiles(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], Point p1, Point p2) {
