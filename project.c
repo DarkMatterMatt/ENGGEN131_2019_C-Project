@@ -143,13 +143,16 @@ int SwapTiles(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], Point p1, Point p2)
     if (p1Value == WORKER_ON_TARGET) p1Value = WORKER;
     if (p2Value == WORKER_ON_TARGET) p2Value = WORKER;
 
-    // add the 'on target' modifier to the destination values
-    if (TileIsTarget(p2Value)) {
+	// the original p2 tile was a target (or a box/worker on top of a target)
+    if (TileIsTarget(warehouse[p2.y][p2.x])) {
+    	// add the 'on target' modifier to the destination values
         if (p1Value == SPACE)  p1Value = TARGET;
         if (p1Value == BOX)    p1Value = BOX_ON_TARGET;
         if (p1Value == WORKER) p1Value = WORKER_ON_TARGET;
     }
-    if (TileIsTarget(p1Value)) {
+	// the original p1 tile was a target (or a box/worker on top of a target)
+    if (TileIsTarget(warehouse[p1.y][p1.x])) {
+    	// add the 'on target' modifier to the destination values
         if (p2Value == SPACE)  p2Value = TARGET;
         if (p2Value == BOX)    p2Value = BOX_ON_TARGET;
         if (p2Value == WORKER) p2Value = WORKER_ON_TARGET;
@@ -343,50 +346,36 @@ int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
 	p2.y = p3.y = worker.y;
 	p2.x = p3.x = worker.x;
 
-	// determine if we are pushing a box or not
-	int pushingBox = 0;
     switch (move) {
         // up
         case 'w': {
 			p2.y -= 1;
-            if (TileIsBox(warehouse[p2.y][p2.x])) {
-				pushingBox = 1;
-				p3.y -= 2;
-            }
+			p3.y -= 2;
             break;
         }
         // left
         case 'a': {
 			p2.x -= 1;
-            if (TileIsBox(warehouse[p2.y][p2.x])) {
-				pushingBox = 1;
-				p3.x -= 2;
-            }
+			p3.x -= 2;
             break;
         }
         // down
         case 's': {
 			p2.y += 1;
-            if (TileIsBox(warehouse[p2.y][p2.x])) {
-				pushingBox = 1;
-				p3.y += 2;
-            }
+			p3.y += 2;
             break;
         }
         // right
         case 'd': {
 			p2.x += 1;
-            if (TileIsBox(warehouse[p2.y][p2.x])) {
-				pushingBox = 1;
-				p3.x += 2;
-            }
+			p3.x += 2;
             break;
         }
     }
 
 	// perform the move
 	int result = 0;
-	if (pushingBox) {
+	if (TileIsBox(warehouse[p2.y][p2.x])) {
 		if (DEBUG) printf("pushingBox\n");
 		result = SwapTiles(warehouse, p2, p3);
 		if (result != 0) {
