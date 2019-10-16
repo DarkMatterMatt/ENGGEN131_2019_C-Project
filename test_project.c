@@ -29,6 +29,9 @@ void MyTestFunction(int task) {
 			printf("   WarehouseAddress(1000) = %d (should be 997)\n", WarehouseAddress(1000));
 			printf("   WarehouseAddress(50) = %d (should be 47)\n", WarehouseAddress(50));
 			printf("   WarehouseAddress(104393) = %d (should be 104383)\n", WarehouseAddress(104393));
+			printf("   WarehouseAddress(3) = %d (should be 3)\n", WarehouseAddress(3));
+			printf("   WarehouseAddress(4) = %d (should be 3)\n", WarehouseAddress(4));
+			printf("   WarehouseAddress(10) = %d (should be 7)\n", WarehouseAddress(10));
 			break;
 		}
 
