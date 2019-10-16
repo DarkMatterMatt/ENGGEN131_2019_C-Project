@@ -87,12 +87,6 @@ Point FindInWarehouse(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile) {
     return FindInWarehouse2(warehouse, tile, -1);
 }
 
-int TileIsBox(int tile) {
-    return tile == BOX || tile == BOX_ON_TARGET;
-}
-int TileIsWorker(int tile) {
-    return tile == WORKER || tile == WORKER_ON_TARGET;
-}
 int TileIsTarget(int tile) {
     return tile == TARGET || tile == BOX_ON_TARGET || tile == WORKER_ON_TARGET;
 }
