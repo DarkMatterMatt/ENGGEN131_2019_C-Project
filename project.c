@@ -19,9 +19,6 @@
 #define MAX(A, B) (((A) > (B)) ? (A) : (B))
 #define ABS(A) ((A > 0) ? (A) : -(A))
 
-// define Point struct in project.h
-// if I submit this by accident then it will still work
-#ifndef PROJECT_H_POINT
 /**
  * Structure containing the position of a single point in the warehouse
  */
@@ -29,7 +26,6 @@ typedef struct {
    int y; // the y position in the warehouse, from top to bottom
    int x; // the x position in the warehouse, from left to right
 } Point;
-#endif
 
 /**
  * BubbleSort sorts an array of integers in ascending order.
@@ -65,34 +61,6 @@ void BubbleSort(int values[], int length) {
     } while (swapped);
 }
 
-int GetWarehouseTile(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], Point p) {
-    return warehouse[p.y][p.x];
-}
-
-char GetTileChar(int tile) {
-    switch (tile) {
-        case 0:
-            return '_';
-        case 1:
-            return '#';
-        case 2:
-            return '*';
-        case 3:
-            return 'O';
-        case 4:
-            return 'o';
-        case 5:
-            return 'X';
-        case 6:
-            return 'x';
-    }
-    return '!';
-}
-
-int GetWarehouseChar(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], Point p) {
-    return GetTileChar(warehouse[p.y][p.x]);
-}
-
 int IsPrime(int num) {
     for (int i = 2; i * i <= num; i++) {
         if (num % i == 0) {
@@ -102,17 +70,11 @@ int IsPrime(int num) {
     return 1;
 }
 
-int CompareInts(const void *aPointer, const void *bPointer) {
-    int a = *((int*) aPointer);
-    int b = *((int*) bPointer);
-    return (a > b) - (a < b);
-}
-
-Point FindInWarehouse3(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1, int tile2, int tile3) {
+Point FindInWarehouse2(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1, int tile2) {
     Point p = { -1, -1 };
     for (int y = 0; y < WAREHOUSE_SIZE; y++) {
         for (int x = 0; x < WAREHOUSE_SIZE; x++) {
-            if (warehouse[y][x] == tile1 || warehouse[y][x] == tile2 || warehouse[y][x] == tile3) {
+            if (warehouse[y][x] == tile1 || warehouse[y][x] == tile2) {
                 p.y = y;
                 p.x = x;
                 return p;
@@ -121,11 +83,8 @@ Point FindInWarehouse3(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1,
     }
     return p;
 }
-Point FindInWarehouse2(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1, int tile2) {
-    return FindInWarehouse3(warehouse, tile1, tile2, -1);
-}
 Point FindInWarehouse(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile) {
-    return FindInWarehouse3(warehouse, tile, -1, -1);
+    return FindInWarehouse2(warehouse, tile, -1);
 }
 
 int TileIsBox(int tile) {
@@ -161,22 +120,16 @@ void RemoveTargetFromTile(int *tile) {
     }
 }
 
-int CountInWarehouse3(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1, int tile2, int tile3) {
+int CountInWarehouse(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile) {
     int count = 0;
     for (int y = 0; y < WAREHOUSE_SIZE; y++) {
         for (int x = 0; x < WAREHOUSE_SIZE; x++) {
-            if (warehouse[y][x] == tile1 || warehouse[y][x] == tile2 || warehouse[y][x] == tile3) {
+            if (warehouse[y][x] == tile) {
                 count++;
             }
         }
     }
     return count;
-}
-int CountInWarehouse2(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1, int tile2) {
-    return CountInWarehouse3(warehouse, tile1, tile2, -1);
-}
-int CountInWarehouse(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile) {
-    return CountInWarehouse3(warehouse, tile, -1, -1);
 }
 
 /*
