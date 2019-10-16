@@ -296,14 +296,17 @@ void WorkerRoute(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE]) {
  * @param  move       The direction to move the worker in [w, a, s, d].
 */
 int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
-    // find location of worker
-    Point worker = FindInWarehouse2(warehouse, WORKER, WORKER_ON_TARGET);
-
-    // these points hold the locations we will travel to
+    // these points hold the locations we will modify
+    // p1 is the current worker location
     // p2 is the location the worker will move to
     // p3 is the location the box will move to (if we are pushing a box)
     Point p1, p2, p3;
-    p1 = p2 = p3 = worker;
+
+    // find location of worker
+    p1 = FindInWarehouse2(warehouse, WORKER, WORKER_ON_TARGET);
+
+    // p3 and p2 are relative to the current worker location
+    p3 = p2 = p1;
 
     switch (move) {
         // up
@@ -363,8 +366,7 @@ int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
     if (p3IsTarget) AddTargetToTile(&warehouse[p3.y][p3.x]);
     
     // finished if the worker is standing on a target and there are zero un-covered targets
-    if (warehouse[p2.y][p2.x] == WORKER_ON_TARGET 
-            && CountInWarehouse(warehouse, TARGET) == 0) {
+    if (warehouse[p2.y][p2.x] == WORKER_ON_TARGET && CountInWarehouse(warehouse, TARGET) == 0) {
         return 1;
     }
 
