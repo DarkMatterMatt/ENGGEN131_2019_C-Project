@@ -139,24 +139,24 @@ int TileIsTarget(int tile) {
 }
 
 void AddTargetToTile(int *tile) {
-    if (TileIsBox(*tile)) {
+    if (*tile == BOX) {
         *tile = BOX_ON_TARGET;
     }
-    else if (TileIsWorker(*tile)) {
+    else if (*tile == WORKER) {
         *tile = WORKER_ON_TARGET;
     }
-    else {
+    else if (*tile == SPACE) {
         *tile = TARGET;
     }
 }
 void RemoveTargetFromTile(int *tile) {
-    if (TileIsBox(*tile)) {
+    if (*tile == BOX_ON_TARGET) {
         *tile = BOX;
     }
-    else if (TileIsWorker(*tile)) {
+    else if (*tile == WORKER_ON_TARGET) {
         *tile = WORKER;
     }
-    else {
+    else if (*tile == TARGET) {
         *tile = SPACE;
     }
 }
@@ -177,48 +177,6 @@ int CountInWarehouse2(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1, 
 }
 int CountInWarehouse(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile) {
     return CountInWarehouse3(warehouse, tile, -1, -1);
-}
-
-int SwapTiles(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], Point p1, Point p2) {
-    int p1Value = warehouse[p1.y][p1.x];
-    int p2Value = warehouse[p2.y][p2.x];
-
-    // fail if trying to move into a wall
-    if (p1Value == WALL || p2Value == WALL) {
-        return 1;
-    }
-
-    // fail if trying to swap a box with a worker or another box
-    if (TileIsBox(p1Value)) {
-        if (TileIsBox(p2Value) || TileIsWorker(p2Value)) {
-            return 2;
-        }
-    }
-    // fail if trying to swap a box with a worker or another box
-    if (TileIsBox(p2Value)) {
-        if (TileIsBox(p1Value) || TileIsWorker(p1Value)) {
-            return 3;
-        }
-    }
-
-    // swap
-    int p1NewValue = p2Value;
-    int p2NewValue = p1Value;
-
-    // remove the 'on target' modifier from the source values
-    RemoveTargetFromTile(&p1NewValue);
-    RemoveTargetFromTile(&p2NewValue);
-
-    // if the original p1 tile was a target (or a box/worker on top of a target)
-    // add the 'on target' modifier to the destination values
-    if (TileIsTarget(p1Value)) AddTargetToTile(&p1NewValue);
-    if (TileIsTarget(p2Value)) AddTargetToTile(&p2NewValue);
-
-    // assign values to the warehouse
-    warehouse[p1.y][p1.x] = p1NewValue;
-    warehouse[p2.y][p2.x] = p2NewValue;
-
-    return 0;
 }
 
 /*
@@ -397,8 +355,8 @@ int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
     // these points hold the locations we will travel to
     // p2 is the location the worker will move to
     // p3 is the location the box will move to (if we are pushing a box)
-    Point p2, p3;
-    p2 = p3 = worker;
+    Point p1, p2, p3;
+    p1 = p2 = p3 = worker;
 
     switch (move) {
         // up
@@ -427,22 +385,38 @@ int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
         }
     }
 
+    // figure out which tiles are targets
+    int p1IsTarget = TileIsTarget(warehouse[p1.y][p1.x]);
+    int p2IsTarget = TileIsTarget(warehouse[p2.y][p2.x]);
+    int p3IsTarget = TileIsTarget(warehouse[p3.y][p3.x]);
+
+    // remove target modifiers
+    RemoveTargetFromTile(&warehouse[p1.y][p1.x]);
+    RemoveTargetFromTile(&warehouse[p2.y][p2.x]);
+    RemoveTargetFromTile(&warehouse[p3.y][p3.x]);
+
     // if we are pushing a box, move that first
-    if (TileIsBox(warehouse[p2.y][p2.x])) {
-        // SwapTiles returns non-zero error codes
-        if (SwapTiles(warehouse, p2, p3) != 0) {
-            // if there was an error, then nothing changed
-            return 0;
+    if (warehouse[p2.y][p2.x] == BOX) {
+        // only move into an empty space
+        if (warehouse[p3.y][p3.x] == SPACE) {
+            warehouse[p3.y][p3.x] = BOX;
+            warehouse[p2.y][p2.x] = WORKER;
+            warehouse[p1.y][p1.x] = SPACE;
         }
     }
-    // move the person to where the box was
-    if (SwapTiles(warehouse, worker, p2) == 0) {
-        // update what tile our worker is sitting on
-        worker = p2;
+    // not pushing a box, only move into an empty space
+    else if (warehouse[p2.y][p2.x] == SPACE) {
+        warehouse[p2.y][p2.x] = WORKER;
+        warehouse[p1.y][p1.x] = SPACE;
     }
+
+    // add back target modifiers
+    if (p1IsTarget) AddTargetToTile(&warehouse[p1.y][p1.x]);
+    if (p2IsTarget) AddTargetToTile(&warehouse[p2.y][p2.x]);
+    if (p3IsTarget) AddTargetToTile(&warehouse[p3.y][p3.x]);
     
     // finished if the worker is standing on a target and there are zero un-covered targets
-    if (warehouse[worker.y][worker.x] == WORKER_ON_TARGET 
+    if (warehouse[p2.y][p2.x] == WORKER_ON_TARGET 
             && CountInWarehouse(warehouse, TARGET) == 0) {
         return 1;
     }
