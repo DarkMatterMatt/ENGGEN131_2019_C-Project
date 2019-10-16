@@ -31,9 +31,10 @@ typedef struct {
  * BubbleSort sorts an array of integers in ascending order.
  * 
  * @param  values[]  The array of integers to sort.
- * @param  length  The number of elements in `values`.
+ * @param  length    The number of elements in array to sort.
  * 
- * @algorithm  
+ * @algorithm  Check every element against it's neighbour, swapping if they are in
+ *               the incorrect order. Repeat until the entire array has been sorted.
  */
 void BubbleSort(int values[], int length) {
     int swapped;
@@ -61,6 +62,11 @@ void BubbleSort(int values[], int length) {
     } while (swapped);
 }
 
+/*
+ * Determines if the given number is a prime number.
+ *
+ * @param  num  The number to check.
+*/
 int IsPrime(int num) {
     for (int i = 2; i * i <= num; i++) {
         if (num % i == 0) {
@@ -70,6 +76,13 @@ int IsPrime(int num) {
     return 1;
 }
 
+/*
+ * Finds the location of the first matching tile in the warehouse.
+ *
+ * @param  warehouse  The warehouse to search through.
+ * @param  tile1      The tile type to search for.
+ * @param  tile2      An optional additional tile type to search for.
+*/
 Point FindInWarehouse2(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile1, int tile2) {
     Point p = { -1, -1 };
     for (int y = 0; y < WAREHOUSE_SIZE; y++) {
@@ -87,10 +100,20 @@ Point FindInWarehouse(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile) {
     return FindInWarehouse2(warehouse, tile, -1);
 }
 
+/*
+ * Determines if the tile is a target, even if it has a box or worker on it.
+ *
+ * @param  tile  The tile to check.
+*/
 int TileIsTarget(int tile) {
     return tile == TARGET || tile == BOX_ON_TARGET || tile == WORKER_ON_TARGET;
 }
 
+/*
+ * Adds the `target` modifier to the tile.
+ *
+ * @param  tile  The tile to modify.
+*/
 void AddTargetToTile(int *tile) {
     if (*tile == BOX) {
         *tile = BOX_ON_TARGET;
@@ -102,6 +125,12 @@ void AddTargetToTile(int *tile) {
         *tile = TARGET;
     }
 }
+
+/*
+ * Removes the `target` modifier from the tile.
+ *
+ * @param  tile  The tile to modify.
+*/
 void RemoveTargetFromTile(int *tile) {
     if (*tile == BOX_ON_TARGET) {
         *tile = BOX;
@@ -114,6 +143,12 @@ void RemoveTargetFromTile(int *tile) {
     }
 }
 
+/*
+ * Counts the number of occurances of a specific tile in the warehouse.
+ *
+ * @param  warehouse  The warehouse to search through.
+ * @param  tile       The tile to search for.
+*/
 int CountInWarehouse(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], int tile) {
     int count = 0;
     for (int y = 0; y < WAREHOUSE_SIZE; y++) {
