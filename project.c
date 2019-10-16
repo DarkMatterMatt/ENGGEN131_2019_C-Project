@@ -222,9 +222,10 @@ int SwapTiles(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], Point p1, Point p2)
 }
 
 /*
-Your comment should go here � it should describe the purpose of the function and a
-brief summary of the algorithm you have used to solve the task (this comment must
-be written in your own words
+ * Calculates the absolute time difference (in seconds) between two times.
+ *
+ * @param  minuteA, secondA  The first time, in minutes and seconds.
+ * @param  minuteB, secondB  The second time, in minutes and seconds.
 */
 int TimeWorked(int minuteA, int secondA, int minuteB, int secondB) {
     int timeA = minuteA * 60 + secondA;
@@ -233,15 +234,15 @@ int TimeWorked(int minuteA, int secondA, int minuteB, int secondB) {
 }
 
 /*
-Your comment should go here � it should describe the purpose of the function and a
-brief summary of the algorithm you have used to solve the task (this comment must
-be written in your own words
+ * Finds the highest prime number that is less than or equal to a maximum.
+ *
+ * @param  maximum  The maximum number that the prime number can be.
 */
 int WarehouseAddress(int maximum) {
     // start at the maximum address and count down until we find a prime
     int i = maximum;
 
-    // if `i` is even, it definitely isn't a prime so decrement
+    // if `i` is even, it definitely isn't a prime so don't check it
     if (i % 2 == 0) i--;
 
     // check through all odd numbers, starting from the top
@@ -251,14 +252,14 @@ int WarehouseAddress(int maximum) {
     }
 
     // oh no, we didn't find a prime
-    // (this is literally impossible as 1 is a prime number)
+    // (this is impossible as 3 is a prime number)
     return -1;
 }
 
 /*
-Your comment should go here � it should describe the purpose of the function and a
-brief summary of the algorithm you have used to solve the task (this comment must
-be written in your own words
+ * Rotates every character to the left.
+ * 
+ * @param  words  The string to rotate.
 */
 void Advertise(char *words) {
     // strings are null-terminated, find length of string
@@ -277,12 +278,13 @@ void Advertise(char *words) {
     words[length - 1] = firstChar;
 }
 
-/*
-Your comment should go here � it should describe the purpose of the function and a
-brief summary of the algorithm you have used to solve the task (this comment must
-be written in your own words
-*/
 
+/*
+ * Finds the lowest unique number in the array.
+ * 
+ * @param  values  The array to search.
+ * @param  length  The number of elements in `values`.
+*/
 int WinningBid(int *values, int length) {
     // if there is only one bid then it wins by default
     if (length == 1) {
@@ -315,9 +317,11 @@ int WinningBid(int *values, int length) {
 }
 
 /*
-Your comment should go here � it should describe the purpose of the function and a
-brief summary of the algorithm you have used to solve the task (this comment must
-be written in your own words
+ * Draws an ASCII box, with center marks.
+ * 
+ * @param  design  The string to draw the box into.
+ * @param  width   The width of the box.
+ * @param  height  The height of the box.
 */
 void BoxDesign(char *design, int width, int height) {
     // find positions for center marks
@@ -355,9 +359,9 @@ void BoxDesign(char *design, int width, int height) {
 }
 
 /*
-Your comment should go here � it should describe the purpose of the function and a
-brief summary of the algorithm you have used to solve the task (this comment must
-be written in your own words
+ * Draws a path through the warehouse from the worker to the box.
+ * 
+ * @param  warehouse  The 2D-array to draw the path through.
 */
 void WorkerRoute(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE]) {
     // find location of worker and box
@@ -381,9 +385,10 @@ void WorkerRoute(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE]) {
 }
 
 /*
-Your comment should go here � it should describe the purpose of the function and a
-brief summary of the algorithm you have used to solve the task (this comment must
-be written in your own words
+ * Move the worker to an adjacent tile, pushing a box if necessary.
+ * 
+ * @param  warehouse  The warehouse to move the worker in.
+ * @param  move       The direction to move the worker in [w, a, s, d].
 */
 int MakeMove(int warehouse[WAREHOUSE_SIZE][WAREHOUSE_SIZE], char move) {
     // find location of worker
