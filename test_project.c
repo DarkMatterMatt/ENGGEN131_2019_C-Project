@@ -211,57 +211,6 @@ void MyTestFunction(int task) {
 			}
 			break;
 		}
-
-		case 11: {
-			printf("\nTESTING SwapTiles:\n");
-			printf("=================\n");
-			
-			int warehouse[10][10] = {
-				{1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-				{1, 1, 1, 0, 0, 0, 1, 1, 1, 1},
-				{1, 2, 5, 3, 0, 0, 1, 1, 1, 1},
-				{1, 1, 1, 0, 3, 2, 1, 1, 1, 1},
-				{1, 2, 1, 1, 3, 0, 1, 1, 1, 1},
-				{1, 0, 1, 0, 2, 0, 1, 1, 1, 1},
-				{1, 3, 0, 4, 3, 3, 2, 1, 1, 1},
-				{1, 2, 0, 0, 2, 0, 0, 1, 1, 1},
-				{1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-				{1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-			};
-			Point p0 = { .x = 3, .y = 5 }; // 0 = SPACE
-			Point p1 = { .x = 0, .y = 2 }; // 1 = WALL
-			Point p2 = { .x = 1, .y = 2 }; // 2 = TARGET
-			Point p3 = { .x = 3, .y = 2 }; // 3 = BOX
-			Point p4 = { .x = 3, .y = 6 }; // 4 = BOX ON TARGET
-			Point p5 = { .x = 2, .y = 2 }; // 5 = WORKER
-
-			// swap _#
-			printf("  SwapTiles(%c, %c) = ", GetWarehouseChar(warehouse, p0), GetWarehouseChar(warehouse, p1));
-			SwapTiles(warehouse, p0, p1);
-			printf("(%c, %c)\n", GetWarehouseChar(warehouse, p0), GetWarehouseChar(warehouse, p1));
-			SwapTiles(warehouse, p0, p1);
-
-			// swap *O
-			printf("  SwapTiles(%c, %c) = ", GetWarehouseChar(warehouse, p2), GetWarehouseChar(warehouse, p3));
-			SwapTiles(warehouse, p2, p3);
-			printf("(%c, %c)\n", GetWarehouseChar(warehouse, p2), GetWarehouseChar(warehouse, p3));
-			SwapTiles(warehouse, p2, p3);
-
-			// swap XO
-			printf("  SwapTiles(%c, %c) = ", GetWarehouseChar(warehouse, p5), GetWarehouseChar(warehouse, p3));
-			SwapTiles(warehouse, p5, p3);
-			printf("(%c, %c)\n", GetWarehouseChar(warehouse, p5), GetWarehouseChar(warehouse, p3));
-			SwapTiles(warehouse, p5, p3);
-
-			// swap Xo
-			printf("  SwapTiles(%c, %c) = ", GetWarehouseChar(warehouse, p5), GetWarehouseChar(warehouse, p4));
-			SwapTiles(warehouse, p5, p4);
-			printf("(%c, %c)\n", GetWarehouseChar(warehouse, p5), GetWarehouseChar(warehouse, p4));
-			SwapTiles(warehouse, p5, p4);
-
-			printf("\n");
-			break;
-		}
 	}
 }
 
