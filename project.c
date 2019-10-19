@@ -179,8 +179,13 @@ int TimeWorked(int minuteA, int secondA, int minuteB, int secondB) {
  * @param  maximum  The maximum number that the prime number can be.
 */
 int WarehouseAddress(int maximum) {
-    // start at the maximum address and count down until we find a prime
-    int i = maximum;
+    // special case: the only even prime number is two
+    if (maximum == 3) {
+        return 2;
+    }
+
+    // start below the maximum address and count down until we find a prime
+    int i = maximum - 1;
 
     // if `i` is even, it definitely isn't a prime so don't check it
     if (i % 2 == 0) i--;
@@ -192,7 +197,7 @@ int WarehouseAddress(int maximum) {
     }
 
     // oh no, we didn't find a prime
-    // (this is impossible as 3 is a prime number)
+    // (this is impossible as 2 is a prime number)
     return -1;
 }
 
