@@ -193,7 +193,9 @@ int WarehouseAddress(int maximum) {
     // check through all odd numbers, starting from the top
     for (; i > 0; i -= 2) {
         // return the highest prime number
-        if (IsPrime(i)) return i;
+        if (IsPrime(i)) {
+            return i;
+        }
     }
 
     // oh no, we didn't find a prime
